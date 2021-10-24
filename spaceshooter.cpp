@@ -1,8 +1,8 @@
 // Group 1
-//program: asteroids.cpp
+//program: spaceshooter.cpp
 //author:  Gordon Griesel
 //date:    2014 - 2021
-//mod spring 2015: added constructors
+//mod spring 20151: added constructors
 //This program is a game starting point for a 3350 project.
 //
 //
@@ -804,17 +804,31 @@ void render()
 	Rect r;
 	glClear(GL_COLOR_BUFFER_BIT);
 	//
+	r.bot = gl.yres - 80;
+	r.left = (gl.xres/2 - 100);
+	r.center = 0;
+	ggprint13(&r, 16, 0x00a1ee, "Welcome to SpaceShooter");
+
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
-	ggprint8b(&r, 12, 0x00a1ee, "SpaceShooter");
+	ggprint8b(&r, 16, 0x00a1ee, "Press c to see the credits");
 	
 	if (gl.show_credits) {
+		glClear(GL_COLOR_BUFFER_BIT);
+		r.bot = gl.yres- 80 ;
+		r.left = (gl.xres /2) - 20 ;
+		r.center = 0;
+		ggprint16(&r, 16, 0x00a1ee, "Credits");
 		show_Daniels_credits(gl.xres/2, gl.yres/2);
 		show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
 		show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
 		show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
 		show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
+		r.bot = gl.yres - 20;
+		r.left = 10;
+		r.center = 0;
+		ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
 	}
 
 	//--------------------------------------------------------------------
