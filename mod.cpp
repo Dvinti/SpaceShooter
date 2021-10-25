@@ -37,7 +37,7 @@ const float timeslice = 1.0f;
 const float gravity = -0.2f;
 #define PI 3.141592653589793
 #define ALPHA 1
-const int MAX_BULLETS = 11;
+const int MAX_BULLETS = 1;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 
 //-------------------------------------------------------------------------
@@ -276,7 +276,7 @@ void init_opengl(void)
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW); glLoadIdentity();
 	//This sets 2D mode (no perspective)
-glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
+	glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
 	//
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
@@ -370,10 +370,36 @@ int check_keys(XEvent *e)
 			credit_toggle();
 			break;
 		case XK_q:
+			exit(0);
 			break;
-		//case XK_spacebar:
+		case XK_space:
 			//move shoot
-		//	break;
+			struct timespec bt;
+			clock_gettime(CLOCK_REALTIME, &bt);
+			double ts = timeDiff(&g.bulletTimer, &bt);
+			if (ts > 0.1) {
+				timeCopy(&g.bulletTimer, &bt);
+				if (g.nbullets < MAX_BULLETS) {
+					Bullet *b = &g.barr[g.nbullets];
+					timeCopy(&b->time, &bt);
+					b->pos[0] = g.ship.pos[0];
+					b->pos[1] = g.ship.pos[1];
+					b->vel[0] = g.ship.vel[0];
+					b->vel[1] = g.ship.vel[1];
+					Flt rad = ((g.ship.angle+90.0)/ 360.0f) * PI * 2.0;
+					Flt xdir = cos(rad);
+					Flt ydir = sin(rad);
+					b->pos[0] += xdir*20.0f;
+					b->pos[1] += ydir*20.0f;
+					b->vel[0] += xdir*6.0f + rnd()* 0.1;
+					b->vel[1] += ydir*6.0f + rnd()* 0.1;
+					b->color[0] = 1.0f;
+					b->color[1] = 1.0f;
+					b->color[2] = 1.0f;
+					g.nbullets++;
+				}
+			}
+			break;
 		
 	}
 	return 0;
@@ -411,6 +437,7 @@ void physics()
 	//Update ship position
 	g.ship.pos[0] += g.ship.vel[0];
 	g.ship.pos[1] += g.ship.vel[1];
+	
 	//Check for collision with window edges
 	if (g.ship.pos[0] < 0.0) {
 		g.ship.pos[0] += (float)gl.xres;
@@ -441,9 +468,11 @@ void physics()
 			//do not increment i.
 			continue;
 		}
-//move the bullet
+		
+		//move the bullet
 		b->pos[0] += b->vel[0];
 		b->pos[1] += b->vel[1];
+		
 		//Check for collision with window edges
 		if (b->pos[0] < 0.0) {
 			b->pos[0] += (float)gl.xres;
@@ -460,6 +489,7 @@ void physics()
 		++i;
 	}
 }
+
 // Credit Screen
 extern void show_Daniels_credits(int, int);
 extern void show_frankie_credits(int, int);
@@ -475,7 +505,7 @@ void render()
 	Rect r;
 	glClear(GL_COLOR_BUFFER_BIT);
 
-// Name
+	// Name
 	r.bot = gl.yres - 60;
 	r.left = (gl.xres/2) - 65;
 	r.center = 0;
@@ -511,7 +541,7 @@ void render()
 	r.center = 0;
 	ggprint8b(&r, 16, 0x4dbbbe, "HOW TO PLAY?");
 
-// Instructions
+	// Instructions
 	r.bot = gl.yres - 50;
 	r.left = 20;
 	r.center = 0;
@@ -525,7 +555,9 @@ void render()
 	r.bot = gl.yres - 635;
 	r.left = 0;
 	r.center = 0;
-	ggprint8b(&r, 16, 0xf82a27, "_______________________________________________________________________________________________________________________________________________");
+	ggprint8b(&r, 16, 0xf82a27, "___________________________________________"
+			"_______________________________________________________________"
+			"_____________________________________");
 
 	// CREDITS
 	r.bot = gl.yres - 675;
@@ -534,7 +566,10 @@ void render()
 	ggprint8b(&r, 16, 0xec8bc2, "Press c to see the credits");
 
 	if (gl.show_credits) {
+		// Clears the Screen
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		// Shows the student's credit
 		r.bot = gl.yres- 80 ;
 		r.left = (gl.xres /2) - 20 ;
 		r.center = 0;
@@ -544,6 +579,8 @@ void render()
 		show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
 		show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
 		show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
+
+		// Instructions
 		r.bot = gl.yres - 20;
 		r.left = 10;
 		r.center = 0;
@@ -581,7 +618,7 @@ void render()
 		glBegin(GL_POINTS);
 		glVertex2f(b->pos[0],      b->pos[1]);
 		glVertex2f(b->pos[0]-1.0f, b->pos[1]);
-glVertex2f(b->pos[0]+1.0f, b->pos[1]);
+		glVertex2f(b->pos[0]+1.0f, b->pos[1]);
 		glVertex2f(b->pos[0],      b->pos[1]-1.0f);
 		glVertex2f(b->pos[0],      b->pos[1]+1.0f);
 		glColor3f(0.8, 0.8, 0.8);
