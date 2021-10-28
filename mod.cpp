@@ -231,7 +231,7 @@ public:
  int check_keys(XEvent *e);
  void physics();
  void render();
- void credit_toggle();
+ 
 
  //==========================================================================
  // M A I N
@@ -367,7 +367,8 @@ int check_keys(XEvent *e)
 			}
 			break;
 		case XK_c:
-			credit_toggle();
+		 	extern void credit_toggle(char);
+			credit_toggle(gl.show_credits);
 			break;
 		case XK_q:
 			exit(0);
@@ -422,15 +423,6 @@ int check_keys(XEvent *e)
 	}
 	*/
 
-void credit_toggle()
-{
-	if (gl.show_credits == 0) {
-		gl.show_credits = 1;
-	}
-	else {
-		gl.show_credits = 0;
-	}
-}
 
 void physics()
 {
