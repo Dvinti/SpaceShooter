@@ -1,11 +1,15 @@
-# Ignores DS_Store
+# Ignores MAC DS_Store
 .DS_Store
 
-# Ignores all output files
+# Ignores output files
 *.o
-
-# Ignores asteroid File
 asteroids
-
-# Ignores spaceshooter file
 spaceshooter
+mod
+
+# Ignores log file
+x.x
+
+# Ignores Swap Files
+*.swp
+*.swo
