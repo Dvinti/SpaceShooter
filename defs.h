@@ -1,5 +1,5 @@
-#ifndef _DEFS_H
-#define _DEFS_H
+#ifndef SS_DEFS_H
+#define SS_DEFS_H
 
 typedef double Flt;
 typedef double Vec[3];
