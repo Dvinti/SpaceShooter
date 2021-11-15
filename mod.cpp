@@ -326,25 +326,25 @@ int check_keys(XEvent *e) {
         case XK_a:
             g.ship.pos[0] += -8.0;
             cout << "<--" << g.ship.pos[0] << endl;
-            if (g.ship.pos[0] < 0.0) {
+            if (g.ship.pos[0] < 200) {
                 cout << "|<-- out of bounds" << endl;
-                g.ship.pos[0] = 0.0;
+                g.ship.pos[0] = 205;
             }
-            else if (g.ship.pos[0] > (float)gl.xres) {
+            else if (g.ship.pos[0] > 800) {
                 cout << "out of bounds -->|" << endl;
-                g.ship.pos[0] = (float)gl.xres - 2.0;
+                g.ship.pos[0] = 795;
             }
             break;
         case XK_d:
             g.ship.pos[0] += 8.0;
             cout << "-->" << g.ship.pos[0] << endl;
-            if (g.ship.pos[0] < 0.0) {
+            if (g.ship.pos[0] < 200) {
                 cout << "|<-- out of bounds" << endl;
-                g.ship.pos[0] = 0.0;
+                g.ship.pos[0] = 205;
             }
-            else if (g.ship.pos[0] > (float)gl.xres) {
+            else if (g.ship.pos[0] > 800) {
                 cout << "out of bounds -->|" << endl;
-                g.ship.pos[0] = (float)gl.xres - 2.0;
+                g.ship.pos[0] = 795;
             }
             break;
         case XK_c:
