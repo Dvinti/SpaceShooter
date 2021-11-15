@@ -74,8 +74,9 @@ Ship::Ship() {
 Enemy::Enemy() {
     //seed random time
     srand (time(NULL));
-    pos[0] = (Flt)(rand() % (gl.xres - 50) + 50);
-    pos[1] = (Flt)(gl.yres/1.191489362);
+    //pos[0] = (Flt)(rand() % (gl.xres - 50) + 50);
+    pos[0] = (Flt)(gl.xres/2);
+    pos[1] = (Flt)(gl.yres/1.1589362);
     pos[2] = 0.0f;
     VecZero(dir);
     VecZero(vel);
@@ -514,12 +515,12 @@ void render() {
     ggprint8b(&r, 16, 0xb21f32, "! PRESS 'Q' TO QUIT!");
 
     // Line under title
-    r.bot = gl.yres - 75;
-    r.left = 0;
-    r.center = 0;
-    ggprint8b(&r, 16, 0xf82a27, "___________________________________________"
-            "_______________________________________________________________"
-            "_____________________________________");
+   r.bot = gl.yres - 75;
+   r.left = 0;
+   r.center = 0;
+   ggprint8b(&r, 16, 0xf82a27, "                                             "
+			" _______________________________________________________________"
+			"___________________________");
 
     // # LIVES
     r.bot = gl.yres - 675;
@@ -544,12 +545,28 @@ void render() {
    ggprint8b(&r, 16, 0xfbfbfa, "Press 'SPACE BAR' to shoot");
 
     // LINE
-    r.bot = gl.yres - 635;
-    r.left = 0;
-    r.center = 0;
-    ggprint8b(&r, 16, 0xf82a27, "___________________________________________"
-            "_______________________________________________________________"
-            "_____________________________________");
+	r.bot = gl.yres - 635;
+	r.left = 0;
+	r.center = 0;
+	ggprint8b(&r, 16, 0xf82a27, "                                             "
+			" _______________________________________________________________"
+			"___________________________");
+	// left line
+	r.bot = gl.yres - 85;
+	r.left = 185;
+	r.center = 0;
+
+	for (int i = 0; i < 35; i++) {
+		ggprint8b(&r, 16, 0xf82a27, "|");
+	}
+
+	// right line	
+	r.bot = gl.yres - 85;
+	r.left = 815;
+	r.center = 0;
+	for (int i = 0; i < 35; i++) {
+		ggprint8b(&r, 16, 0xf82a27, "|");
+	}
 
     // CREDITS
     r.bot = gl.yres - 675;
