@@ -2,7 +2,11 @@
 // djosep.cpp
 // My Own Work
 
+#include <ctime>
 #include "fonts.h"
+#include "game.h"
+
+extern Global gl;
 
 void show_Daniels_credits(int x, int y)
 {

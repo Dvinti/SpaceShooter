@@ -2,7 +2,7 @@ CFLAGS = -I ./include
 ##LIB    = ./libggfonts.so
 LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 
-all: spaceshooter mod
+all: mod #spaceshooter
 
 spaceshooter: spaceshooter.cpp log.cpp timers.cpp djosep.cpp \
 			  etapiaramire.cpp fsanchez.cpp jandrestacza.cpp \

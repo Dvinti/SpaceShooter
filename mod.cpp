@@ -16,12 +16,7 @@
 #include <GL/glx.h>
 #include "log.h"
 #include "fonts.h"
-#include "global.h"
-#include "ship.h"
-#include "enemy.h"
-#include "bullet.h"
 #include "game.h"
-#include "define.h"
 
 using namespace std;
 
@@ -60,6 +55,8 @@ Global::Global() {
 	show_credits = 0;
 };
 
+Global gl;
+
 Ship::Ship() {
     pos[0] = (Flt)(gl.xres/2);
     pos[1] = (Flt)(gl.yres/8);
@@ -97,6 +94,8 @@ Game::Game() {
 Game::~Game() {
     delete [] barr;
 }
+
+Game g;
 
 //X Windows variables
 class X11_wrapper {
@@ -207,19 +206,19 @@ class X11_wrapper {
         return e;
     }
 } x11(gl.xres, gl.yres);
- // ---> for fullscreen x11(0, 0);
+// ---> for fullscreen x11(0, 0);
 
- //function prototypes
- void init_opengl(void);
- int check_keys(XEvent *e);
- void physics();
- void render();
- void credit_toggle();
- int score = 0;
+//function prototypes
+void init_opengl(void);
+int check_keys(XEvent *e);
+void physics();
+void credit_toggle();
+void render();
+int score = 0;
 
- //==========================================================================
- // M A I N
- //==========================================================================
+//==========================================================================
+// M A I N
+//==========================================================================
 int main() {
     logOpen();
     init_opengl();
@@ -348,6 +347,7 @@ int check_keys(XEvent *e) {
             }
             break;
         case XK_c:
+            //extern void credit_toggle();
             credit_toggle();
             break;
         case XK_q:
