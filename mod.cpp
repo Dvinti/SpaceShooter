@@ -314,6 +314,8 @@ int check_keys(XEvent *e) {
         case XK_f:
             break;
         case XK_s:
+            extern void instruct_toggle();
+            instruct_toggle();
             break;
         case XK_Down:
             break;
@@ -333,10 +335,6 @@ int check_keys(XEvent *e) {
         case XK_c:
             extern void credit_toggle();
             credit_toggle();
-            break;
-        case XK_i:
-            extern void instruct_toggle();
-            instruct_toggle();
             break;
         case XK_q:
             return 1;
@@ -431,6 +429,9 @@ void render() {
     if (gl.show_instructions) {
         extern void show_instructions();
         show_instructions();
+    } else {
+        extern void instructions();
+        instructions();
     }
 
     if (gl.show_credits) {
