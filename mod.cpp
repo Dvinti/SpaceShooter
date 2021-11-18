@@ -24,9 +24,9 @@ using namespace std;
 
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
+const int MAX_BULLETS = 100;
 #define PI 3.141592653589793
 #define ALPHA 1
-const int MAX_BULLETS = 100;
 //const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 
 //-------------------------------------------------------------------------
@@ -47,12 +47,12 @@ Screen*  scrn = DefaultScreenOfDisplay(disp);
 int height = scrn->height;
 int width  = scrn->width;
 
-
 Global::Global() {
 	xres = 1000;
 	yres = 700;
 	memset(keys, 0, 65536);
 	show_credits = 0;
+    show_instructions = 0;
 };
 
 Global gl;
@@ -213,7 +213,6 @@ class X11_wrapper {
 void init_opengl(void);
 int check_keys(XEvent *e);
 void physics();
-void credit_toggle();
 void render();
 int score = 0;
 
@@ -335,37 +334,16 @@ int check_keys(XEvent *e) {
             extern void credit_toggle();
             credit_toggle();
             break;
+        case XK_i:
+            extern void instruct_toggle();
+            instruct_toggle();
+            break;
         case XK_q:
-            exit(0);
+            return 1;
             break;
         case XK_space:
-            //move shoot
-            cout << "space bar" << endl;
-            struct timespec bt;
-            clock_gettime(CLOCK_REALTIME, &bt);
-            double ts = timeDiff(&g.bulletTimer, &bt);
-            Bullet *b = &g.barr[g.nbullets];
-            if (ts > 0.1) {
-                timeCopy(&g.bulletTimer, &bt);
-                if (g.nbullets < MAX_BULLETS) {
-                    timeCopy(&b->time, &bt);
-                    b->pos[0] = g.ship.pos[0];
-                    b->pos[1] = g.ship.pos[1];
-                    b->vel[0] = g.ship.vel[0];
-                    b->vel[1] = g.ship.vel[1];
-                    Flt rad = ((g.ship.angle+90.0)/ 360.0f) * PI * 2.0;
-                    Flt xdir = cos(rad);
-                    Flt ydir = sin(rad);
-                    b->pos[0] += xdir*20.0f;
-                    b->pos[1] += ydir*20.0f;
-                    b->vel[0] += xdir*6.0f + rnd()* 0.1;
-                    b->vel[1] += ydir*6.0f + rnd()* 0.1;
-                    b->color[0] = 1.0f;
-                    b->color[1] = 1.0f;
-                    b->color[2] = 1.0f;
-                    g.nbullets++;
-                }
-            }
+            extern void shoot_bullets();
+            shoot_bullets();
             break;
 	}
     return 0;
@@ -428,7 +406,6 @@ void physics() {
     }
 
 // bullet hits enemy
-
 }
 
 // Credit Screen
@@ -438,96 +415,23 @@ extern void show_enrique_credits(int, int);
 extern void show_jennipher_credits(int, int);
 extern void show_jose_credits(int, int);
 
-// Movement
-
-
 void render() {
     Rect r;
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Name
-    r.bot = gl.yres - 60;
-    r.left = (gl.xres/2) - 65;
-    r.center = 0;
-    ggprint13(&r, 16, 0x978eff, "- - - SpaceShooter - - -");
+    // Show UI
+    extern void show_ui();
+    show_ui();
 
-    // SCORE
-    r.bot = gl.yres - 665;
-    r.left = (gl.xres/2) - 65;
-    r.center = 0;
-    ggprint13(&r, 16, 0xf3d172, "- - - SCORE - - -");
+    // Calculate Score
+    extern void show_scores(int);
+    show_scores(score);
 
-    // SCORE #
-    r.bot = gl.yres - 690;
-    r.left = (gl.xres/2) - 65;
-    r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "      <0000>      ");
-
-    // Quit
-    r.bot = gl.yres - 30;
-    r.left = 870;
-    r.center = 0;
-    ggprint8b(&r, 16, 0xb21f32, "! PRESS 'Q' TO QUIT!");
-
-    // Line under title
-   r.bot = gl.yres - 75;
-   r.left = 0;
-   r.center = 0;
-   ggprint8b(&r, 16, 0xf82a27, "                                             "
-			" _______________________________________________________________"
-			"___________________________");
-
-    // # LIVES
-    r.bot = gl.yres - 675;
-    r.left = 20;
-    r.center = 0;
-    ggprint8b(&r, 16, 0x00a1ee, "NUMBER OF LIVES: ");
-
-   // HOW TO PLAY
-   r.bot = gl.yres - 30;
-   r.left = 20;
-   r.center = 0;
-   ggprint8b(&r, 16, 0x4dbbbe, "HOW TO PLAY?");
-
-   // Instructions
-   r.bot = gl.yres - 50;
-   r.left = 20;
-   r.center = 0;
-   ggprint8b(&r, 16, 0xfbfbfa, "Press 'A' to move left and 'D' to move right");
-   r.bot = gl.yres - 65;
-   r.left = 20;
-   r.center = 0;
-   ggprint8b(&r, 16, 0xfbfbfa, "Press 'SPACE BAR' to shoot");
-
-    // LINE
-	r.bot = gl.yres - 635;
-	r.left = 0;
-	r.center = 0;
-	ggprint8b(&r, 16, 0xf82a27, "                                             "
-			" _______________________________________________________________"
-			"___________________________");
-	// left line
-	r.bot = gl.yres - 85;
-	r.left = 185;
-	r.center = 0;
-
-	for (int i = 0; i < 35; i++) {
-		ggprint8b(&r, 16, 0xf82a27, "|");
-	}
-
-	// right line	
-	r.bot = gl.yres - 85;
-	r.left = 815;
-	r.center = 0;
-	for (int i = 0; i < 35; i++) {
-		ggprint8b(&r, 16, 0xf82a27, "|");
-	}
-
-    // CREDITS
-    r.bot = gl.yres - 675;
-    r.left = 830;
-    r.center = 0;
-    ggprint8b(&r, 16, 0xec8bc2, "Press c to see the credits");
+    // Show Instructions
+    if (gl.show_instructions) {
+        extern void show_instructions();
+        show_instructions();
+    }
 
     if (gl.show_credits) {
         // Clears the Screen
@@ -597,7 +501,7 @@ void render() {
 
     //-------------------------------------------------------------------------
 
-     //Draw the bullets
+    //Draw the bullets
     for (int i = 0; i < g.nbullets; i++) {
         Bullet *b = &g.barr[i];
         //Log("draw bullet...\n");
