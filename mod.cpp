@@ -71,8 +71,9 @@ Ship::Ship() {
 Enemy::Enemy() {
     //seed random time
     srand (time(NULL));
-    //pos[0] = (Flt)(rand() % (gl.xres - 50) + 50);
-    pos[0] = (Flt)(gl.xres/2);
+    //rand()%(max-min + 1) + min;
+    pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
+    //pos[0] = (Flt)(gl.xres/2);
     pos[1] = (Flt)(gl.yres/1.1589362);
     pos[2] = 0.0f;
     VecZero(dir);
@@ -323,31 +324,15 @@ int check_keys(XEvent *e) {
             break;
 
         case XK_a:
-            g.ship.pos[0] += -8.0;
-            cout << "<--" << g.ship.pos[0] << endl;
-            if (g.ship.pos[0] < 200) {
-                cout << "|<-- out of bounds" << endl;
-                g.ship.pos[0] = 205;
-            }
-            else if (g.ship.pos[0] > 800) {
-                cout << "out of bounds -->|" << endl;
-                g.ship.pos[0] = 795;
-            }
+            extern void move_ship_left();
+            move_ship_left();
             break;
         case XK_d:
-            g.ship.pos[0] += 8.0;
-            cout << "-->" << g.ship.pos[0] << endl;
-            if (g.ship.pos[0] < 200) {
-                cout << "|<-- out of bounds" << endl;
-                g.ship.pos[0] = 205;
-            }
-            else if (g.ship.pos[0] > 800) {
-                cout << "out of bounds -->|" << endl;
-                g.ship.pos[0] = 795;
-            }
+            extern void move_ship_right();
+            move_ship_right();
             break;
         case XK_c:
-            //extern void credit_toggle();
+            extern void credit_toggle();
             credit_toggle();
             break;
         case XK_q:
@@ -386,15 +371,6 @@ int check_keys(XEvent *e) {
     return 0;
 }
 
-void credit_toggle() {
-    if (gl.show_credits == 0) {
-        gl.show_credits = 1;
-    }
-    else {
-        gl.show_credits = 0;
-    }
-}
-
 void physics() {
     //Update ship position
     g.ship.pos[0] += g.ship.vel[0];
@@ -420,15 +396,8 @@ void physics() {
     int i = 0;
     while (i < g.nbullets) {
         Bullet *b = &g.barr[i];
-        //Check if bullet reached the top of the screen
-        if (b->pos[1] > (float)gl.yres) {
-            //time to delete the bullet.
-            memcpy(&g.barr[i], &g.barr[g.nbullets-1],
-                    sizeof(Bullet));
-            g.nbullets--;
-            //do not increment i.
-            continue;
-        }
+        extern void bullet_bounds_check(Bullet *b, int i);
+        bullet_bounds_check(b, i);
 
         //move the bullet
         b->pos[0] += b->vel[0];
@@ -436,6 +405,8 @@ void physics() {
 
         //cout << "bullet POS " << b->pos[0] << " " << b->pos[1] << endl;
         //Check for collision with window edges
+
+//********************************WE CAN DELETE THIS***********************************************************
         if (b->pos[0] < 0.0) {
             b->pos[0] += (float)gl.xres;
         }
@@ -447,28 +418,12 @@ void physics() {
             //b->pos[1] += (float)gl.yres;
         }
         else if (b->pos[1] > (float)gl.yres) {
-            cout << "Bullet out of bounds TOP" << endl;
             //b->pos[1] -= (float)gl.yres;
             //break; //We can kill the bullets this way but its laggy
         }
-        
-        //hitbox for the enemy ship
-        int x1 = g.enemy.pos[0] - 15.0;
-        int x2 = g.enemy.pos[0] + 15.0;
-        int y1 = g.enemy.pos[1] - 15.0;
-        int y2 = g.enemy.pos[1] + 15.0;
-
-        //check for collision with enemy ship
-        if(b->pos[0] > x1 && b->pos[0] < x2 && b->pos[1] > y1 && b->pos[1] < y2) {
-            score += 1;
-            cout << "hit! Score: " << score << endl;
-            //time to delete the bullet.
-            memcpy(&g.barr[i], &g.barr[g.nbullets-1],
-                    sizeof(Bullet));
-            g.nbullets--;
-            //do not increment i.
-            continue;
-        }
+//***********************************************************************************************************        
+        extern int check_bullet_collision(int i, Bullet *b, int score);
+        score = check_bullet_collision(i, b, score);
         ++i;
     }
 
