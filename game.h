@@ -22,7 +22,7 @@ class Global {
 		int xres, yres;
 		char keys[65536];
 		int show_credits;
-
+	public:
 		// Constructer
 		Global();
 };
