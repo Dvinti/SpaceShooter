@@ -18,18 +18,18 @@ typedef Flt Matrix[4][4];
                         (c)[2]=(a)[2]-(b)[2]
 
 class Global {
-	public:
+    public:
         int xres, yres;
         char keys[65536];
         int show_credits;
         int show_instructions;
-	public:
+    public:
         // Constructer
         Global();
 };
 
 class Ship {
-	public:
+    public:
         Vec pos;
         Vec dir;
         Vec vel;
