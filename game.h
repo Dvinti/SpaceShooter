@@ -19,13 +19,13 @@ typedef Flt Matrix[4][4];
 
 class Global {
 	public:
-		int xres, yres;
-		char keys[65536];
-		int show_credits;
-		int show_instructions;
+        int xres, yres;
+        char keys[65536];
+        int show_credits;
+        int show_instructions;
 	public:
-		// Constructer
-		Global();
+        // Constructer
+        Global();
 };
 
 class Ship {
