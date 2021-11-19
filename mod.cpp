@@ -52,7 +52,8 @@ Global::Global() {
     yres = 700;
     memset(keys, 0, 65536);
     show_credits = 0;
-    show_instructions = 0;
+    show_instructions =0;
+    startUpDisplay =0;
 };
 
 Global gl;
@@ -214,6 +215,7 @@ void init_opengl(void);
 int check_keys(XEvent *e);
 void physics();
 void render();
+
 int score = 0;
 
 //==========================================================================
@@ -311,7 +313,9 @@ int check_keys(XEvent *e) {
     switch (key) {
         case XK_Escape:
             return 1;
-        case XK_f:
+        case XK_x:
+            extern void startWindow();
+            startWindow();
             break;
         case XK_s:
             extern void instruct_toggle();
@@ -444,10 +448,16 @@ extern void show_enrique_credits(int, int);
 extern void show_jennipher_credits(int, int);
 extern void show_jose_credits(int, int);
 
+
 void render() {
     Rect r;
     glClear(GL_COLOR_BUFFER_BIT);
-
+    // working on the start window
+    if (gl.startUpDisplay) {
+        extern void welcomeDisplay();
+        welcomeDisplay();
+        return;
+    }
     // Show UI
     extern void show_ui();
     show_ui();
@@ -455,6 +465,7 @@ void render() {
     // Calculate Score
     extern void show_scores(int);
     show_scores(score);
+    
 
     // Show Instructions
     if (gl.show_instructions) {

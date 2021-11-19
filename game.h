@@ -23,6 +23,7 @@ class Global {
         char keys[65536];
         int show_credits;
         int show_instructions;
+        int startUpDisplay;
     public:
         // Constructer
         Global();
