@@ -17,7 +17,6 @@
 #include "log.h"
 #include "fonts.h"
 #include "game.h"
-
 using namespace std;
 
 //#include "header.h"
@@ -25,6 +24,7 @@ using namespace std;
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
 const int MAX_BULLETS = 100;
+const int MAX_ENEMIES = 3;
 #define PI 3.141592653589793
 #define ALPHA 1
 //const Flt MINIMUM_ASTEROID_SIZE = 60.0;
@@ -73,9 +73,10 @@ Enemy::Enemy() {
     //seed random time
     srand (time(NULL));
     //rand()%(max-min + 1) + min;
-    pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
-    //pos[0] = (Flt)(gl.xres/2);
-    pos[1] = (Flt)(gl.yres/1.1589362);
+    for(int k = 0; k < MAX_ENEMIES; k++) {
+        xpos[k] = (Flt)(rand() % (815 - 185 + 1) + 185);
+        ypos[k] = (Flt)(gl.yres/1.1589362);
+    }
     pos[2] = 0.0f;
     VecZero(dir);
     VecZero(vel);
@@ -433,8 +434,8 @@ void physics() {
             //break; //We can kill the bullets this way but its laggy
         }
 //***********************************************************************************************************        
-        extern int check_bullet_collision(int i, Bullet *b, int score);
-        score = check_bullet_collision(i, b, score);
+        extern int check_bullet_collision(int i, Bullet *b, int score, int MAX_ENEMIES);
+        score = check_bullet_collision(i, b, score, MAX_ENEMIES);
         ++i;
     }
 
@@ -523,24 +524,27 @@ void render() {
     //--------------------------------------------------------------------
 
     //Draw the enemy ship, rows = 3, col = 6
-    glColor3fv(g.enemy.color);
-    glPushMatrix();
-    glTranslatef(g.enemy.pos[0], g.enemy.pos[1], g.enemy.pos[2]);
-    glRotatef(g.enemy.angle, 0.0f, 0.0f, 1.0f);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(-12.0f, -10.0f);
-    glVertex2f(  0.0f,  20.0f);
-    glVertex2f(  0.0f,  -6.0f);
-    glVertex2f(  0.0f,  -6.0f);
-    glVertex2f(  0.0f,  20.0f);
-    glVertex2f( 12.0f, -10.0f);
-    glEnd();
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_POINTS);
-    glVertex2f(5.0f, 0.0f);
-    glEnd();
-    glPopMatrix();
-    glEnd();
+    for(int i = 0; i < MAX_ENEMIES; i++) {
+        glColor3fv(g.enemy[i].color);
+        glPushMatrix();
+        glTranslatef(g.enemy[i].xpos[i], g.enemy[i].ypos[i], g.enemy[i].pos[2]);
+        //cout << "enemy pos " << g.enemy[i].pos[0] << " " << g.enemy[i].pos[1] << endl;
+        glRotatef(g.enemy[i].angle, 0.0f, 0.0f, 1.0f);
+        glBegin(GL_TRIANGLES);
+        glVertex2f(-12.0f, -10.0f);
+        glVertex2f(  0.0f,  20.0f);
+        glVertex2f(  0.0f,  -6.0f);
+        glVertex2f(  0.0f,  -6.0f);
+        glVertex2f(  0.0f,  20.0f);
+        glVertex2f( 12.0f, -10.0f);
+        glEnd();
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glBegin(GL_POINTS);
+        glVertex2f(5.0f, 0.0f);
+        glEnd();
+        glPopMatrix();
+        glEnd();
+    }
 
     //-------------------------------------------------------------------------
 

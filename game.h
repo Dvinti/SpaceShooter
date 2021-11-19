@@ -17,6 +17,10 @@ typedef Flt Matrix[4][4];
                         (c)[1]=(a)[1]-(b)[1]; \
                         (c)[2]=(a)[2]-(b)[2]
 
+
+//const int MAX_ENEMIE = 4;
+
+
 class Global {
     public:
         int xres, yres;
@@ -53,6 +57,8 @@ class Bullet {
 
 class Enemy {
     public:
+        Vec xpos;
+        Vec ypos;
         Vec pos;
         Vec dir;
         Vec vel;
@@ -66,7 +72,7 @@ class Enemy {
 class Game {
     public:
         Ship ship;
-        Enemy enemy;
+        Enemy enemy[3];
         Bullet *barr;
         int nbullets;
         int nenemy;

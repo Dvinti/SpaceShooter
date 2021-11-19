@@ -1,4 +1,5 @@
 //Enrique Tapia
+//Software Engineering
 
 #include <ctime>
 #include <iostream>
@@ -49,22 +50,25 @@ void move_ship_right() {
 		}
 }
 
-int check_bullet_collision(int i, Bullet *b, int score) {
-		//hitbox for the enemy ship
-	int x1 = g.enemy.pos[0] - 15.0;
-	int x2 = g.enemy.pos[0] + 15.0;
-	int y1 = g.enemy.pos[1] - 15.0;
-	int y2 = g.enemy.pos[1] + 15.0;
+int check_bullet_collision(int i, Bullet *b, int score, int MAX_ENEMIES) {
+	//hitbox for the enemy ship
+	for(int j = 0; j < MAX_ENEMIES ; j++) {
+		int x1 = g.enemy[j].xpos[j] - 15.0;
+		int x2 = g.enemy[j].xpos[j] + 15.0;
+		int y1 = g.enemy[j].ypos[j] - 15.0;
+		int y2 = g.enemy[j].ypos[j] + 15.0;
 
-	//check for collision with enemy ship
-	if(b->pos[0] > x1 && b->pos[0] < x2 && b->pos[1] > y1 && b->pos[1] < y2) {
-		score += 1;
-		cout << "hit! Score: " << score << endl;
-		//time to delete the bullet.
-		memcpy(&g.barr[i], &g.barr[g.nbullets-1],
-				sizeof(Bullet));
-		g.nbullets--;
-		//do not increment i.
+		//cout << "hitbox "<< j << ": pos: " << x1 << " " <<y1 << endl;
+
+		//check for collision with enemy ship
+		if(b->pos[0] > x1 && b->pos[0] < x2 && b->pos[1] > y1 && b->pos[1] < y2) {
+			score += 1;
+			cout << "hit! Score: " << score << endl;
+			//time to delete the bullet.
+			memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
+			g.nbullets--;
+			//do not increment i.
+		}
 	}
 	return score;
 }
