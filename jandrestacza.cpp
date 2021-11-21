@@ -23,11 +23,11 @@ void welcomeDisplay()
 	ggprint8b(&r, 16, c, "            ");
 	ggprint8b(&r, 16, c, "            ");
 	ggprint8b(&r, 16, c, "            ");
-	//ggprint8b(&r, 16, c, "h - How to play");
+	ggprint8b(&r, 16, c, "S for Instructions");
 	ggprint8b(&r, 16, c, "            ");
 	ggprint8b(&r, 24, c, "            ");
-	//ggprint8b(&r, 60, c, "c - Credits");
-	//ggprint8b(&r, 16, c, "e - Exit");	
+	ggprint8b(&r, 60, c," C for Credits");
+	ggprint8b(&r, 16, c, "Q to quite");	
 }
 void startWindow()
 {
