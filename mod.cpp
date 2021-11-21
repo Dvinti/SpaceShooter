@@ -459,20 +459,46 @@ void render() {
     if (gl.startUpDisplay) {
         // Clears the Screen
         glClear(GL_COLOR_BUFFER_BIT);
+
         // Show UI
         extern void show_ui();
         show_ui();
+
         // Show Instructions
         if (gl.show_instructions) {
-        extern void show_instructions();
-        show_instructions();
+            extern void show_instructions();
+            show_instructions();
         } else {
-        extern void instructions();
-        instructions();
+            extern void instructions();
+            instructions();
         }
+
         // Calculate Score
         extern void show_scores(int);
         show_scores(score);
+
+        // Credit Screen
+        if (gl.show_credits) {
+            // Clears the Screen
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Shows the student's credit
+            r.bot = gl.yres - 80;
+            r.left = (gl.xres/2) - 20;
+            r.center = 0;
+            ggprint16(&r, 16, 0x00a1ee, "Credits");
+            show_Daniels_credits(gl.xres/2, gl.yres/2);
+            show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
+            show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
+            show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
+            show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
+
+            // Instructions
+            r.bot = gl.yres - 20;
+            r.left = 10;
+            r.center = 0;
+            ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
+        }
 
         //--------------------------------------------------------------------
         //Draw the ship
@@ -542,30 +568,5 @@ void render() {
             glEnd();
         }
         return;
-    }
-    
-
-    if (gl.show_credits) {
-        // Clears the Screen
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Shows the student's credit
-        r.bot = gl.yres- 80 ;
-        r.left = (gl.xres /2) - 20 ;
-        r.center = 0;
-        ggprint16(&r, 16, 0x00a1ee, "Credits");
-        show_Daniels_credits(gl.xres/2, gl.yres/2);
-        show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
-        show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
-        show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
-        show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
-
-        // Instructions
-        r.bot = gl.yres - 20;
-        r.left = 10;
-        r.center = 0;
-        ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
-    }
-
-    
+	}
 }
