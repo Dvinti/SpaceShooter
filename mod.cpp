@@ -452,30 +452,98 @@ extern void show_jose_credits(int, int);
 
 void render() {
     Rect r;
-    glClear(GL_COLOR_BUFFER_BIT);
+    
+    extern void welcomeDisplay();
+    welcomeDisplay();
     // working on the start window
     if (gl.startUpDisplay) {
-        extern void welcomeDisplay();
-        welcomeDisplay();
-        return;
-    }
-    // Show UI
-    extern void show_ui();
-    show_ui();
-
-    // Calculate Score
-    extern void show_scores(int);
-    show_scores(score);
-    
-
-    // Show Instructions
-    if (gl.show_instructions) {
+        // Clears the Screen
+        glClear(GL_COLOR_BUFFER_BIT);
+        // Show UI
+        extern void show_ui();
+        show_ui();
+        // Show Instructions
+        if (gl.show_instructions) {
         extern void show_instructions();
         show_instructions();
-    } else {
+        } else {
         extern void instructions();
         instructions();
+        }
+        // Calculate Score
+        extern void show_scores(int);
+        show_scores(score);
+
+        //--------------------------------------------------------------------
+        //Draw the ship
+        glColor3fv(g.ship.color);
+        glPushMatrix();
+        glTranslatef(g.ship.pos[0], g.ship.pos[1], g.ship.pos[2]);
+        //float angle = atan2(ship.dir[1], ship.dir[0]);
+        glRotatef(g.ship.angle, 0.0f, 0.0f, 1.0f);
+        glBegin(GL_TRIANGLES);
+        glVertex2f(-12.0f, -10.0f);
+        glVertex2f(  0.0f,  20.0f);
+        glVertex2f(  0.0f,  -6.0f);
+        glVertex2f(  0.0f,  -6.0f);
+        glVertex2f(  0.0f,  20.0f);
+        glVertex2f( 12.0f, -10.0f);
+        glEnd();
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glBegin(GL_POINTS);
+        glVertex2f(0.0f, 0.0f);
+        glEnd();
+        glPopMatrix();
+        glEnd();
+
+        //--------------------------------------------------------------------
+
+        //Draw the enemy ship, rows = 3, col = 6
+        for(int i = 0; i < MAX_ENEMIES; i++) {
+            glColor3fv(g.enemy[i].color);
+            glPushMatrix();
+            glTranslatef(g.enemy[i].xpos[i], g.enemy[i].ypos[i], g.enemy[i].pos[2]);
+            //cout << "enemy pos " << g.enemy[i].pos[0] << " " << g.enemy[i].pos[1] << endl;
+            glRotatef(g.enemy[i].angle, 0.0f, 0.0f, 1.0f);
+            glBegin(GL_TRIANGLES);
+            glVertex2f(-12.0f, -10.0f);
+            glVertex2f(  0.0f,  20.0f);
+            glVertex2f(  0.0f,  -6.0f);
+            glVertex2f(  0.0f,  -6.0f);
+            glVertex2f(  0.0f,  20.0f);
+            glVertex2f( 12.0f, -10.0f);
+            glEnd();
+            glColor3f(1.0f, 0.0f, 0.0f);
+            glBegin(GL_POINTS);
+            glVertex2f(5.0f, 0.0f);
+            glEnd();
+            glPopMatrix();
+            glEnd();
+        }
+
+        //-------------------------------------------------------------------------
+
+        //Draw the bullets
+        for (int i = 0; i < g.nbullets; i++) {
+            Bullet *b = &g.barr[i];
+            //Log("draw bullet...\n");
+            glColor3f(1.0, 1.0, 1.0);
+            glBegin(GL_POINTS);
+            glVertex2f(b->pos[0],      b->pos[1]);
+            glVertex2f(b->pos[0]-1.0f, b->pos[1]);
+            glVertex2f(b->pos[0]+1.0f, b->pos[1]);
+            glVertex2f(b->pos[0],      b->pos[1]-1.0f);
+            glVertex2f(b->pos[0],      b->pos[1]+1.0f);
+            glColor3f(0.8, 0.8, 0.8);
+            glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
+            glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
+            glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
+            glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
+            glEnd();
+        }
+        return;
     }
+    
 
     if (gl.show_credits) {
         // Clears the Screen
@@ -499,71 +567,5 @@ void render() {
         ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
     }
 
-    //--------------------------------------------------------------------
-    //Draw the ship
-    glColor3fv(g.ship.color);
-    glPushMatrix();
-    glTranslatef(g.ship.pos[0], g.ship.pos[1], g.ship.pos[2]);
-    //float angle = atan2(ship.dir[1], ship.dir[0]);
-    glRotatef(g.ship.angle, 0.0f, 0.0f, 1.0f);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(-12.0f, -10.0f);
-    glVertex2f(  0.0f,  20.0f);
-    glVertex2f(  0.0f,  -6.0f);
-    glVertex2f(  0.0f,  -6.0f);
-    glVertex2f(  0.0f,  20.0f);
-    glVertex2f( 12.0f, -10.0f);
-    glEnd();
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_POINTS);
-    glVertex2f(0.0f, 0.0f);
-    glEnd();
-    glPopMatrix();
-    glEnd();
-
-    //--------------------------------------------------------------------
-
-    //Draw the enemy ship, rows = 3, col = 6
-    for(int i = 0; i < MAX_ENEMIES; i++) {
-        glColor3fv(g.enemy[i].color);
-        glPushMatrix();
-        glTranslatef(g.enemy[i].xpos[i], g.enemy[i].ypos[i], g.enemy[i].pos[2]);
-        //cout << "enemy pos " << g.enemy[i].pos[0] << " " << g.enemy[i].pos[1] << endl;
-        glRotatef(g.enemy[i].angle, 0.0f, 0.0f, 1.0f);
-        glBegin(GL_TRIANGLES);
-        glVertex2f(-12.0f, -10.0f);
-        glVertex2f(  0.0f,  20.0f);
-        glVertex2f(  0.0f,  -6.0f);
-        glVertex2f(  0.0f,  -6.0f);
-        glVertex2f(  0.0f,  20.0f);
-        glVertex2f( 12.0f, -10.0f);
-        glEnd();
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glBegin(GL_POINTS);
-        glVertex2f(5.0f, 0.0f);
-        glEnd();
-        glPopMatrix();
-        glEnd();
-    }
-
-    //-------------------------------------------------------------------------
-
-    //Draw the bullets
-    for (int i = 0; i < g.nbullets; i++) {
-        Bullet *b = &g.barr[i];
-        //Log("draw bullet...\n");
-        glColor3f(1.0, 1.0, 1.0);
-        glBegin(GL_POINTS);
-        glVertex2f(b->pos[0],      b->pos[1]);
-        glVertex2f(b->pos[0]-1.0f, b->pos[1]);
-        glVertex2f(b->pos[0]+1.0f, b->pos[1]);
-        glVertex2f(b->pos[0],      b->pos[1]-1.0f);
-        glVertex2f(b->pos[0],      b->pos[1]+1.0f);
-        glColor3f(0.8, 0.8, 0.8);
-        glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
-        glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
-        glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
-        glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
-        glEnd();
-    }
+    
 }

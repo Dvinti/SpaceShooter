@@ -8,12 +8,13 @@ Date: September 30, 2021
 #include <cmath>
 #include "fonts.h"
 #include "game.h"
-
+#include <GL/glut.h>
 extern Global gl;
 
 void welcomeDisplay()
 {
 	Rect r;
+    glClear(GL_COLOR_BUFFER_BIT);
     unsigned int c = 0x00ffff44;
 	r.bot = gl.yres - 180;
 	r.left = 300;
