@@ -15,19 +15,18 @@ void welcomeDisplay()
 {
 	Rect r;
     glClear(GL_COLOR_BUFFER_BIT);
-    unsigned int c = 0x00ffff44;
-	r.bot = gl.yres - 180;
+    r.bot = gl.yres - 180;
 	r.left = 300;
 	r.center = 0;
-	ggprint8b(&r, 16, c, "x - Play");
-	ggprint8b(&r, 16, c, "            ");
-	ggprint8b(&r, 16, c, "            ");
-	ggprint8b(&r, 16, c, "            ");
-	ggprint8b(&r, 16, c, "S for Instructions");
-	ggprint8b(&r, 16, c, "            ");
-	ggprint8b(&r, 24, c, "            ");
-	ggprint8b(&r, 60, c," C for Credits");
-	ggprint8b(&r, 16, c, "Q to quite");	
+	ggprint8b(&r, 16, 0x00a1ee, "X - Play");
+	ggprint8b(&r, 16, 0x00a1ee, "            ");
+	ggprint8b(&r, 16, 0x00a1ee, "            ");
+	ggprint8b(&r, 16, 0x00a1ee, "            ");
+	ggprint8b(&r, 16, 0x00a1ee, "S - Instructions");
+	ggprint8b(&r, 16, 0x00a1ee, "            ");
+	ggprint8b(&r, 24, 0x00a1ee, "            ");
+	ggprint8b(&r, 60, 0x00a1ee," C - Credits");
+	ggprint8b(&r, 16, 0x00a1ee, "Q - Quit");	
 }
 void startWindow()
 {
