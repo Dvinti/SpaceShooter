@@ -15,18 +15,22 @@ void welcomeDisplay()
 {
 	Rect r;
     glClear(GL_COLOR_BUFFER_BIT);
-    r.bot = gl.yres - 180;
-	r.left = 300;
+    r.bot = gl.yres - 250;
+	r.left = 430;
 	r.center = 0;
-	ggprint8b(&r, 16, 0x00a1ee, "X - Play");
-	ggprint8b(&r, 16, 0x00a1ee, "            ");
-	ggprint8b(&r, 16, 0x00a1ee, "            ");
-	ggprint8b(&r, 16, 0x00a1ee, "            ");
-	ggprint8b(&r, 16, 0x00a1ee, "S - Instructions");
-	ggprint8b(&r, 16, 0x00a1ee, "            ");
-	ggprint8b(&r, 24, 0x00a1ee, "            ");
-	ggprint8b(&r, 60, 0x00a1ee," C - Credits");
-	ggprint8b(&r, 16, 0x00a1ee, "Q - Quit");	
+	ggprint8b(&r, 16, 0x00ffff44, "X - Play");
+	ggprint8b(&r, 16, 0x00ffff44, "            ");
+	ggprint8b(&r, 16, 0x00ffff44, "            ");
+	ggprint8b(&r, 16, 0x00ffff44, "            ");
+	ggprint8b(&r, 16, 0x00ffff44, "S - Instructions");
+	ggprint8b(&r, 16, 0x00ffff44, "            ");
+	ggprint8b(&r, 16, 0x00ffff44, "            ");
+    ggprint8b(&r, 16, 0x00ffff44, "            ");
+	ggprint8b(&r, 16, 0x00ffff44," C - Credits");
+    ggprint8b(&r, 16, 0x00ffff44, "            ");
+    ggprint8b(&r, 16, 0x00ffff44, "            ");
+    ggprint8b(&r, 16, 0x00ffff44, "            ");
+	ggprint8b(&r, 16, 0x00ffff44, "Q - Quit");	
 }
 void startWindow()
 {
