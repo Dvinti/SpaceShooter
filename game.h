@@ -1,6 +1,8 @@
 #ifndef SS_GAME_H
 #define SS_GAME_H
 
+#include <GL/glx.h>
+
 //defined types
 typedef float Flt;
 typedef float Vec[3];
@@ -28,6 +30,12 @@ class Global {
         int show_credits;
         int show_instructions;
         int startUpDisplay;
+        int Background1;
+        int Background2;
+        int BackgroundTitle;
+        GLuint Background1Texture;
+        GLuint Background2Texture;
+        GLuint BackgroundTitleTexture;
     public:
         // Constructer
         Global();
@@ -81,5 +89,12 @@ class Game {
         Game();
         ~Game();
 };
-
+class Image {
+public:
+    int width, height;
+    unsigned char *data;
+    //unsigned char *buildAlphaData(Image *img);
+    ~Image();
+    Image(const char *);
+};
 #endif

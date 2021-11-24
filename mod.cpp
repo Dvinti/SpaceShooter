@@ -54,6 +54,9 @@ Global::Global() {
     show_credits = 0;
     show_instructions =0;
     startUpDisplay =0;
+    Background1 = 1;
+    Background2 = 1;
+    BackgroundTitle = 1;
 };
 
 Global gl;
@@ -253,6 +256,12 @@ int main() {
     return 0;
 }
 
+Image img[4] = {
+"./images/Background_game.png",
+"./images/Background_game2.png",
+"./images/MainShip.png",
+"./images/EnemyShip.png"};
+
 void init_opengl(void) {
     //OpenGL initialization
     glViewport(0, 0, gl.xres, gl.yres);
@@ -272,6 +281,68 @@ void init_opengl(void) {
     //Do this to allow fonts
     glEnable(GL_TEXTURE_2D);
     initialize_fonts();
+
+   	glGenTextures(1, &gl.Background2Texture);
+    glGenTextures(1, &gl.Background1Texture);
+    glGenTextures(1, &gl.BackgroundTitleTexture);
+
+
+    extern unsigned char *buildAlphaData(Image *img);
+
+    
+
+    //Code for SpaceShooter title 
+
+    extern void build_imageTexture(GLuint texid);
+    build_imageTexture(gl.BackgroundTitleTexture); 
+    
+    /*
+     *
+     * Must free data
+     *
+     */
+    unsigned char *BackgroundTitleData = buildAlphaData(&img[2]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[2].width, img[2].height, 0,
+                                GL_RGBA, GL_UNSIGNED_BYTE, BackgroundTitleData);
+
+    free(BackgroundTitleData);
+
+
+    //Code for Background1 
+
+
+    extern void build_imageTexture(GLuint texid);
+    build_imageTexture(gl.Background1Texture);
+
+    /*
+     *
+     * Must free data
+     *
+     */
+    unsigned char *Background1Data = buildAlphaData(&img[0]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[0].width, img[0].height, 0,
+                                GL_RGBA, GL_UNSIGNED_BYTE, Background1Data);
+
+    free(Background1Data);
+
+    
+    //Code for Background2
+
+
+    extern void build_imageTexture(GLuint texid);
+    build_imageTexture(gl.Background2Texture);
+
+    /*
+     *
+     * Must free data
+     *
+     */
+    unsigned char *Background2Data = buildAlphaData(&img[1]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[1].width, img[1].height, 0,
+                                GL_RGBA, GL_UNSIGNED_BYTE, Background2Data);
+
+    free(Background2Data);
+ 
 }
 
 void normalize2d(Vec v) {
@@ -453,13 +524,30 @@ extern void show_jose_credits(int, int);
 void render() {
     Rect r;
     
+    
+    
+    
     extern void welcomeDisplay();
     welcomeDisplay();
+    /*Uncomment for SpaceShooter screen
+     *
+     *
+    extern void show_background(int x, int y, GLuint texid);
+    show_background(gl.xres,gl.yres,gl.BackgroundTitleTexture);
+     
+     *
+     */
+
     // working on the start window
     if (gl.startUpDisplay) {
-        // Clears the Screen
-        glClear(GL_COLOR_BUFFER_BIT);
+    
+    
 
+
+    if(gl.Background1) {
+       extern void show_background(int x, int y, GLuint texid);
+       show_background(gl.xres,gl.yres,gl.Background1Texture); 
+    }
         // Show UI
         extern void show_ui();
         show_ui();
