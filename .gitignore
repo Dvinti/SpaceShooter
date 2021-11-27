@@ -20,3 +20,4 @@ enemy.h
 bullet.h
 defs.h
 define.h
+ship.h
