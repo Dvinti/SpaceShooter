@@ -22,7 +22,6 @@ typedef Flt Matrix[4][4];
 
 //const int MAX_ENEMIE = 4;
 
-
 class Global {
     public:
         int xres, yres;
@@ -89,6 +88,7 @@ class Game {
         Game();
         ~Game();
 };
+
 class Image {
 public:
     int width, height;
@@ -97,4 +97,5 @@ public:
     ~Image();
     Image(const char *);
 };
+
 #endif

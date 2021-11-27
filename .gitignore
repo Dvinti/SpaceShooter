@@ -13,3 +13,10 @@ x.x
 # Ignores Swap Files
 *.swp
 *.swo
+
+# Ignores HEADER Files
+global.h
+enemy.h
+bullet.h
+defs.h
+define.h
