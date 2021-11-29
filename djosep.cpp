@@ -3,8 +3,11 @@
 // My Own Work
 
 #include <iostream>
+#include <fstream>
+#include <stdio.h>
 #include <ctime>
 #include <cmath>
+#include <GL/glut.h>
 #include "fonts.h"
 #include "game.h"
 
@@ -40,8 +43,33 @@ void show_scores(int score)
     r.center = 0;
     ggprint13(&r, 16, 0xfbfbfa, "      <%0.4i>      ", score);
 }
-
-/*void credit_screen()
+/*
+void highscore(int score, string scorename)
 {
-	
+    int highscore[3] = {0000};
+    string highscorename[3];
+    string scorename[
+    string scorename;
+    string score2name;
+    glClear(GL_COLOR_BUFFER_BIT);
+    // If Round is finished
+
+    // Show Top_score Image
+
+    // Show list of Highscore
+    if (score > highscore[0]) {
+        score = highscore[0];
+        scorename = highscorename[0];
+        highscore[0] = score;
+        highscorename[0] = score;
+
+        for (i = 0; i < 3; i++) {
+            int score2 = highscore[i];
+            int score2name = highscorename[i];
+            highscore[i] = score;
+            highscorename[i] = scorename;
+            score = score2;
+            scorename = score1name;
+        }
+    }
 }*/

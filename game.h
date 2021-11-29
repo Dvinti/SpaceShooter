@@ -8,6 +8,19 @@ typedef float Flt;
 typedef float Vec[3];
 typedef Flt Matrix[4][4];
 
+/*
+typedef struct t_button {
+	Rect r;
+	char text[32];
+	int over;
+	int down;
+	int click;
+	float color[3];
+	float dcolor[3];
+	unsigned int text_color;
+};
+*/
+
 //macros
 #define rnd() (((Flt)rand())/(Flt)RAND_MAX)
 #define random(a) (rand()%a)
