@@ -93,12 +93,30 @@ class Enemy {
         Enemy();
 };
 
+class Asteroid {
+public:
+	Vec pos;
+	Vec vel;
+	int nverts;
+	Flt radius;
+	Vec vert[8];
+	float angle;
+	float rotate;
+	float color[3];
+	struct Asteroid *prev;
+	struct Asteroid *next;
+public:
+	Asteroid();
+};
+
 class Game {
     public:
         Ship ship;
+        Asteroid *ahead;
         Enemy enemy[3];
         Bullet *barr;
         int nbullets;
+        int nasteroids;
         int nenemy;
         struct timespec bulletTimer;
     public:

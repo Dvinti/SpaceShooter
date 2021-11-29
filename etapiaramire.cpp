@@ -13,6 +13,7 @@ using namespace std;
 extern Global gl;
 extern Game g;
 extern Bullet b;
+extern Asteroid a;
 
 
 void credit_toggle() {
@@ -50,6 +51,49 @@ void move_ship_right() {
 		}
 }
 
+void enemy_boundary_check(Asteroid *a) {
+	//keeps enemy from going out of bounds
+	//reaches left edge
+	if (a->pos[0] < 200.0) {
+		a->vel[0] = -a->vel[0];
+	}
+	//reaches right edge
+	else if (a->pos[0] > 800.0) {
+		a->vel[0] = -a->vel[0];
+	}
+	//reaches bottom of screen
+	else if (a->pos[1] < gl.yres - 700.0) {
+		a->pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
+		a->pos[1] = (Flt)(gl.yres/1.1589362);
+		a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
+		a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
+	/*   
+	CAUSING SEGMENTATION FAULT 
+		if (g.nasteroids == 1) {
+			cout << "Game Over!" << endl;
+			break;
+		}
+		else if (g.nasteroids == 2) {
+			cout << "Last one: " << g.nasteroids << endl;
+			deleteAsteroid(&g, a);
+			g.nasteroids--;
+		}
+		else {
+			cout << "Asteroid: " << g.nasteroids << endl;
+			Asteroid *savea = a->next;
+			deleteAsteroid(&g, a);
+			a = savea;
+			g.nasteroids--;
+		}
+	*/
+	}
+	//reaches top of screen
+	else if (a->pos[1] > (float)gl.yres - 75.0) {
+		a->vel[1] = -a->vel[1];
+	}
+}
+
+//remove this function \/\/
 int check_bullet_collision(int i, Bullet *b, int score, int MAX_ENEMIES) {
 	//hitbox for the enemy ship
 	for(int j = 0; j < MAX_ENEMIES ; j++) {
