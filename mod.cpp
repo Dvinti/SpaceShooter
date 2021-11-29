@@ -57,6 +57,7 @@ Global::Global() {
     Background1 = 1;
     Background2 = 1;
     BackgroundTitle = 1;
+    Highscore = 1;
 };
 
 Global gl;
@@ -170,7 +171,7 @@ class X11_wrapper {
     void set_title() {
         //Set the window title bar.
         XMapWindow(dpy, win);
-//  XStoreName(dpy, win, "Asteroids template");     // Title
+        XStoreName(dpy, win, "SpaceShooter");     // Title
     }
 
         void check_resize(XEvent *e) {
@@ -256,11 +257,13 @@ int main() {
     return 0;
 }
 
-Image img[4] = {
+Image img[6] = {
 "./images/Background_game.png",
 "./images/Background_game2.png",
+"./images/SpaceShooter.png",
 "./images/MainShip.png",
-"./images/EnemyShip.png"};
+"./images/EnemyShip.png",
+"./images/Highscore.png" };
 
 void init_opengl(void) {
     //OpenGL initialization
@@ -285,11 +288,9 @@ void init_opengl(void) {
    	glGenTextures(1, &gl.Background2Texture);
     glGenTextures(1, &gl.Background1Texture);
     glGenTextures(1, &gl.BackgroundTitleTexture);
-
+    glGenTextures(1, &gl.HighscoreTexture);
 
     extern unsigned char *buildAlphaData(Image *img);
-
-    
 
     //Code for SpaceShooter title 
 
@@ -307,11 +308,8 @@ void init_opengl(void) {
 
     free(BackgroundTitleData);
 
-
     //Code for Background1 
 
-
-    extern void build_imageTexture(GLuint texid);
     build_imageTexture(gl.Background1Texture);
 
     /*
@@ -325,11 +323,8 @@ void init_opengl(void) {
 
     free(Background1Data);
 
-    
     //Code for Background2
 
-
-    extern void build_imageTexture(GLuint texid);
     build_imageTexture(gl.Background2Texture);
 
     /*
@@ -342,6 +337,21 @@ void init_opengl(void) {
                                 GL_RGBA, GL_UNSIGNED_BYTE, Background2Data);
 
     free(Background2Data);
+
+    //Code for Highscore
+
+    build_imageTexture(gl.HighscoreTexture);
+
+    /*
+     *
+     * Must free data
+     *
+     */
+    unsigned char *Highscore = buildAlphaData(&img[5]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[5].width, img[5].height, 0,
+                                GL_RGBA, GL_UNSIGNED_BYTE, Highscore);
+    
+    free(Highscore);
  
 }
 
@@ -399,7 +409,6 @@ int check_keys(XEvent *e) {
             break;
         case XK_minus:
             break;
-
         case XK_a:
             extern void move_ship_left();
             move_ship_left();
@@ -513,6 +522,9 @@ void physics() {
 // bullet hits enemy
 }
 
+// Background Images
+extern void show_background(int x, int y, GLuint texid);
+
 // Credit Screen
 extern void show_Daniels_credits(int, int);
 extern void show_frankie_credits(int, int);
@@ -520,34 +532,27 @@ extern void show_enrique_credits(int, int);
 extern void show_jennipher_credits(int, int);
 extern void show_jose_credits(int, int);
 
-
 void render() {
     Rect r;
     
-    
-    
-    
     extern void welcomeDisplay();
     welcomeDisplay();
-    /*Uncomment for SpaceShooter screen
-     *
-     *
-    extern void show_background(int x, int y, GLuint texid);
-    show_background(gl.xres,gl.yres,gl.BackgroundTitleTexture);
-     
-     *
-     */
+
+    /* Title Screen
+    if (gl.BackgroundTitle) {
+        glColor3f(1.0, 1.0, 1.0);
+        show_background(gl.xres,gl.yres,gl.BackgroundTitleTexture);
+    }
+    */
 
     // working on the start window
     if (gl.startUpDisplay) {
     
-    
+        if (gl.Background1) {
+            glColor3f(1.0, 1.0, 1.0);
+            show_background(gl.xres,gl.yres,gl.Background1Texture); 
+        }
 
-
-    if(gl.Background1) {
-       extern void show_background(int x, int y, GLuint texid);
-       show_background(gl.xres,gl.yres,gl.Background1Texture); 
-    }
         // Show UI
         extern void show_ui();
         show_ui();
@@ -657,6 +662,7 @@ void render() {
         }
         return;
 	}
+
     // Credit Screen
     if (gl.show_credits) {
         // Clears the Screen
@@ -679,10 +685,10 @@ void render() {
         r.center = 0;
         ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
     }
+
     // Show Instructions
     if (gl.show_instructions) {
         extern void show_instructions();
         show_instructions();
     }
-
 }
