@@ -29,12 +29,16 @@ class Global {
         int show_credits;
         int show_instructions;
         int startUpDisplay;
+
         int Background1;
         int Background2;
         int BackgroundTitle;
+        int Highscore;
+
         GLuint Background1Texture;
         GLuint Background2Texture;
         GLuint BackgroundTitleTexture;
+        GLuint HighscoreTexture;
     public:
         // Constructer
         Global();
@@ -93,7 +97,6 @@ class Image {
 public:
     int width, height;
     unsigned char *data;
-    //unsigned char *buildAlphaData(Image *img);
     ~Image();
     Image(const char *);
 };
