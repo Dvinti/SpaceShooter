@@ -106,7 +106,7 @@ Game::Game() {
     //build 10 asteroids...
     for (int j=0; j<2; j++) {
         Asteroid *a = new Asteroid;
-        a->nverts = 5;  //number of vertices
+        a->nverts = 3;  //number of vertices
         a->radius = 30.0; //size of asteroid
         //a->radius = rnd()*80.0 + 40.0; 
         Flt r2 = a->radius / 2.0;  
@@ -114,14 +114,14 @@ Game::Game() {
         Flt inc = (PI * 2.0) / (Flt)a->nverts;  //angle increment
         for (int i=0; i<a->nverts; i++) {
             a->vert[i][0] = sin(angle) * (r2 + rnd() * a->radius); 
-            a->vert[i][1] = cos(angle) * (r2 + rnd() * a->radius);
+            a->vert[i][1] = cos(angle) * (50);
             angle += inc;
         }
-        a->pos[0] = (Flt)(rand() % (800 - 200 + 1) + 200);
-        a->pos[1] = (Flt)(gl.yres/1.1589362);
-        a->pos[2] = 0.0f;
-        a->angle = 0.0;
-        a->rotate = rnd() * 4.0 - 2.0;
+        a->pos[0] = (Flt)(rand() % (800 - 200 + 1) + 200); //x position
+        a->pos[1] = (Flt)(gl.yres/1.1589362); //y position
+        a->pos[2] = 0.0f; //z position
+        a->angle = 0.0; 
+        a->rotate = rnd() * 4.0 - 2.0; 
         a->color[0] = 0.0;
         a->color[1] = 1.0;
         a->color[2] = 1.0;
@@ -262,6 +262,7 @@ void physics();
 void render();
 
 int score = 0;
+int lives = 3;
 
 //==========================================================================
 // M A I N
@@ -614,14 +615,15 @@ void physics() {
 	//
 	//Update asteroid positions
 	Asteroid *a = g.ahead;
-    extern void enemy_boundary_check(Asteroid *a);
+    extern int enemy_boundary_check(Asteroid *a, int lives);
 	while (a) {
 		a->pos[0] += a->vel[0];
 		a->pos[1] += a->vel[1];
-        enemy_boundary_check(a);
+        lives = enemy_boundary_check(a, lives);
 		a->angle += a->rotate;
 		a = a->next;
 	}
+    cout << "lives: " << lives << endl;
 	//
 	//Asteroid collision with bullets?
 	//If collision detected:

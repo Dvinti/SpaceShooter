@@ -51,7 +51,7 @@ void move_ship_right() {
 		}
 }
 
-void enemy_boundary_check(Asteroid *a) {
+int enemy_boundary_check(Asteroid *a, int lives) {
 	//keeps enemy from going out of bounds
 	//reaches left edge
 	if (a->pos[0] < 200.0) {
@@ -67,6 +67,7 @@ void enemy_boundary_check(Asteroid *a) {
 		a->pos[1] = (Flt)(gl.yres/1.1589362);
 		a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
 		a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
+		lives -= 1;
 	/*   
 	CAUSING SEGMENTATION FAULT 
 		if (g.nasteroids == 1) {
@@ -91,6 +92,7 @@ void enemy_boundary_check(Asteroid *a) {
 	else if (a->pos[1] > (float)gl.yres - 75.0) {
 		a->vel[1] = -a->vel[1];
 	}
+	return lives;
 }
 
 //remove this function \/\/
