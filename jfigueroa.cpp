@@ -8,6 +8,49 @@
 
 extern Global gl;  
 
+void show_time(int st)
+ {
+    Rect r;
+    // ****
+    r.bot = (gl.yres/2)+20;
+    r.left = (gl.xres/2)+340;
+    r.center = 0;
+    ggprint13(&r, 16, 0xfbfbfa, "* * * * * * * * * * * *");
+
+    // Time
+    r.bot = gl.yres/2;
+    r.left = (gl.xres/2)+355;
+    r.center = 0;
+    ggprint13(&r, 16, 0xfbfbfa, "TIME: ", "%i", st);
+
+    r.bot = gl.yres/2;
+    r.left = (gl.xres/2)+400;
+    r.center = 0;
+    ggprint13(&r, 16, 0xfbfbfa, "%i", st);
+
+    // sec
+    r.bot = gl.yres/2;
+    r.left = (gl.xres/2)+425;
+    r.center = 0;
+    ggprint8b(&r, 16, 0xfbfbfa, "sec ");
+
+    // *****
+    r.bot = (gl.yres/2)-25;
+    r.left = (gl.xres/2)+340;
+    r.center = 0;
+    ggprint13(&r, 16, 0xfbfbfa, "* * * * * * * * * * * *");
+}
+
+void show_timesup()
+{
+
+    Rect r;
+    r.bot = gl.yres/2;
+    r.left = (gl.xres/2)-50 ;
+    r.center = 0;
+    ggprint13(&r, 16, 0xfbfbfa, "Time is up!!!\n Lets see your score");
+}
+
 void show_ui()
 {
 	Rect r;
