@@ -30,7 +30,6 @@ const int MAX_ENEMIES = 0;
 const Flt MINIMUM_ASTEROID_SIZE = 20.0;
 
 /* Used to create the buttons */
-int done = 0;
 int lbutton = 0;
 int rbutton = 0;
 #define nbuttons 3
@@ -47,7 +46,6 @@ typedef struct t_button {
 } Button;
 
 Button button[4];
-
 
 //-------------------------------------------------------------------------
 //Setup timers
@@ -72,8 +70,8 @@ Global::Global() {
     yres = 700;
     memset(keys, 0, 65536);
     show_credits = 0;
-    show_instructions =0;
-    startUpDisplay =0;
+    show_instructions = 0;
+    startUpDisplay = 0;
     Background1 = 0;
     Background2 = 0;
     BackgroundTitle = 1;
@@ -291,6 +289,10 @@ int score = 0;
 int highscore = 0;
 int lives = 3;
 
+/* Booleans */
+bool paused = false;
+bool done = false;
+
 //==========================================================================
 // M A I N
 //==========================================================================
@@ -314,9 +316,9 @@ int main() {
         timeCopy(&timeStart, &timeCurrent);
         physicsCountdown += timeSpan;
         while (physicsCountdown >= physicsRate) {
-         physics();
+        physics();
             physicsCountdown -= physicsRate;
-         }
+        }
         render();
         x11.swapBuffers();
     }
@@ -541,19 +543,10 @@ int check_keys(XEvent *e) {
 
     (void)shift;
 
-    switch (key) {
-        case XK_Escape:
-            done = 1;
-            break;
-        case XK_x:
-            //extern void startWindow();
-            //startWindow();
-            break;
-        case XK_s:
-            extern void instruct_toggle();
-            instruct_toggle();
-            break;
-        case XK_Left:
+    // Movement Controls
+    if (!paused) {
+        switch (key) {
+            case XK_Left:
             extern void move_ship_left();
             move_ship_left();
             break;
@@ -567,6 +560,25 @@ int check_keys(XEvent *e) {
         case XK_d:
             move_ship_right();
             break;
+        case XK_space:
+            void shoot_bullets();
+            shoot_bullets();
+            break;
+        }
+    }
+    // Menu Controls
+    switch (key) {
+        case XK_Escape:
+            done = 1;
+            break;
+        case XK_x:
+            //extern void startWindow();
+            //startWindow();
+            break;
+        case XK_s:
+            extern void instruct_toggle();
+            instruct_toggle();
+            break;
         case XK_c:
             extern void credit_toggle();
             credit_toggle();
@@ -574,9 +586,9 @@ int check_keys(XEvent *e) {
         case XK_q:
             done = 1;
             break;
-        case XK_space:
-            void shoot_bullets();
-            shoot_bullets();
+        case XK_p:
+            void pause_game();
+            pause_game();
             break;
 	}
     return 0;
@@ -701,6 +713,15 @@ void shoot_bullets()
         }
     }
 }
+
+void pause_game() {
+    if (paused == 0) {
+        paused = 1;
+    } else {
+        paused = 0;
+    }
+}
+
 void deleteAsteroid(Game *g, Asteroid *node)
 {
 	//Remove a node from doubly-linked list
@@ -812,74 +833,77 @@ void physics() {
     }
 	//
 	//Update asteroid positions
-	Asteroid *a = g.ahead;
-    extern int enemy_boundary_check(Asteroid *a, int lives);
-	while (a) {
-		a->pos[0] += a->vel[0];
-		a->pos[1] += a->vel[1];
-        lives = enemy_boundary_check(a, lives);
-		a->angle += a->rotate;
-		a = a->next;
-	}
-    //cout << "lives: " << lives << endl;
-	//
-	//Asteroid collision with bullets?
-	//If collision detected:
-	//     1. delete the bullet
-	//     2. break the asteroid into pieces
-	//        if asteroid small, delete it
-	a = g.ahead;
-	while (a) {
-		//is there a bullet within its radius?
-		int i=0;
-		while (i < g.nbullets) {
-			Bullet *b = &g.barr[i];
-			d0 = b->pos[0] - a->pos[0];
-			d1 = b->pos[1] - a->pos[1];
-			dist = (d0*d0 + d1*d1);
-			if (dist < (a->radius*a->radius)) {
-				//std::cout << "asteroid hit." << std::endl;
-				//this asteroid is hit.
-				if (a->radius > MINIMUM_ASTEROID_SIZE) {
-					//break it into pieces.
-					Asteroid *ta = a;
-					buildAsteroidFragment(ta, a);
-					int r = rand()%5; //random number between 0 and 4
-					for (int k=0; k<r; k++) {
-						//get the next asteroid position in the array
-						Asteroid *ta = new Asteroid;
-						buildAsteroidFragment(ta, a);
-						//add to front of asteroid linked list
-						ta->next = g.ahead;
-						if (g.ahead != NULL)
-							g.ahead->prev = ta;
-						g.ahead = ta;
-						g.nasteroids++;
-					}
-				} else {
-					a->color[0] = 1.0;
-					a->color[1] = 0.1;
-					a->color[2] = 0.1;
-					//asteroid is too small to break up
-					//delete the asteroid and bullet
-					Asteroid *savea = a->next;
-					deleteAsteroid(&g, a);
-					a = savea;
-					g.nasteroids--;
-                    score++;
-				}
-				//delete the bullet...
-				memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
-				g.nbullets--;
-				if (a == NULL)
-					break;
-			}
-			i++;
-		}
-		if (a == NULL)
-			break;
-		a = a->next;
-	}
+    if (!paused) {
+        Asteroid *a = g.ahead;
+        extern int enemy_boundary_check(Asteroid *a, int lives);
+        while (a) {
+            a->pos[0] += a->vel[0];
+            a->pos[1] += a->vel[1];
+            lives = enemy_boundary_check(a, lives);
+            a->angle += a->rotate;
+            a = a->next;
+        }
+    
+        //cout << "lives: " << lives << endl;
+        //
+        //Asteroid collision with bullets?
+        //If collision detected:
+        //     1. delete the bullet
+        //     2. break the asteroid into pieces
+        //        if asteroid small, delete it
+        a = g.ahead;
+        while (a) {
+            //is there a bullet within its radius?
+            int i=0;
+            while (i < g.nbullets) {
+                Bullet *b = &g.barr[i];
+                d0 = b->pos[0] - a->pos[0];
+                d1 = b->pos[1] - a->pos[1];
+                dist = (d0*d0 + d1*d1);
+                if (dist < (a->radius*a->radius)) {
+                    //std::cout << "asteroid hit." << std::endl;
+                    //this asteroid is hit.
+                    if (a->radius > MINIMUM_ASTEROID_SIZE) {
+                        //break it into pieces.
+                        Asteroid *ta = a;
+                        buildAsteroidFragment(ta, a);
+                        int r = rand()%5; //random number between 0 and 4
+                        for (int k=0; k<r; k++) {
+                            //get the next asteroid position in the array
+                            Asteroid *ta = new Asteroid;
+                            buildAsteroidFragment(ta, a);
+                            //add to front of asteroid linked list
+                            ta->next = g.ahead;
+                            if (g.ahead != NULL)
+                                g.ahead->prev = ta;
+                            g.ahead = ta;
+                            g.nasteroids++;
+                        }
+                    } else {
+                        a->color[0] = 1.0;
+                        a->color[1] = 0.1;
+                        a->color[2] = 0.1;
+                        //asteroid is too small to break up
+                        //delete the asteroid and bullet
+                        Asteroid *savea = a->next;
+                        deleteAsteroid(&g, a);
+                        a = savea;
+                        g.nasteroids--;
+                        score++;
+                    }
+                    //delete the bullet...
+                    memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
+                    g.nbullets--;
+                    if (a == NULL)
+                        break;
+                }
+                i++;
+            }
+            if (a == NULL)
+                break;
+            a = a->next;
+        }
+    }
 	//---------------------------------------------------
 }
 
@@ -940,7 +964,6 @@ void render() {
             }
         }
     }
-
     // working on the start window
     if (gl.startUpDisplay) {
     
@@ -1089,9 +1112,9 @@ void render() {
             glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
             glEnd();
         }
-	}
+    }
 
-    if (lives < 3) {
+    if (lives < 0) {
         gl.Highscore = 1;
         glColor3f(1.0, 1.0, 1.0);
         show_background(gl.xres,gl.yres,gl.HighscoreTexture);
