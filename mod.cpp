@@ -1,4 +1,4 @@
-// Group 1
+// Group #1
 //program: spaceshooter.cpp
 //author:  Gordon Griesel
 //date:    2014 - 2021
@@ -18,8 +18,6 @@
 #include "fonts.h"
 #include "game.h"
 using namespace std;
-
-//#include "header.h"
 
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
@@ -65,13 +63,15 @@ Screen*  scrn = DefaultScreenOfDisplay(disp);
 int height = scrn->height;
 int width  = scrn->width;
 
-Global::Global() {
+Global::Global() 
+{
     xres = 1000;
     yres = 700;
     memset(keys, 0, 65536);
     show_credits = 0;
     show_instructions = 0;
     startUpDisplay = 0;
+    paused = false;
     Background1 = 0;
     Background2 = 0;
     BackgroundTitle = 1;
@@ -80,7 +80,8 @@ Global::Global() {
 
 Global gl;
 
-Ship::Ship() {
+Ship::Ship() 
+{
     pos[0] = (Flt)(gl.xres/2);
     pos[1] = (Flt)(gl.yres/8);
     pos[2] = 0.0f;
@@ -93,12 +94,14 @@ Ship::Ship() {
 
 Bullet::Bullet() {};
 
-Asteroid::Asteroid() {
+Asteroid::Asteroid() 
+{
 	prev = NULL;
 	next = NULL;
 };
 
-Game::Game() {
+Game::Game() 
+{
     ahead = NULL;
     barr = new Bullet[MAX_BULLETS];
     nasteroids = 0;
@@ -149,7 +152,8 @@ Game g;
 void init();
 
 //X Windows variables
-class X11_wrapper {
+class X11_wrapper 
+{
     private:
         Display *dpy;
         Window win;
@@ -274,13 +278,13 @@ float lives = 3.0;
 int st = 60;
 
 /* Booleans */
-bool paused = false;
 bool done = false;
 
 //==========================================================================
 // M A I N
 //==========================================================================
-int main() {
+int main() 
+{
     logOpen();
     init_opengl();
     init();
@@ -319,7 +323,8 @@ Image img[6] = {
 "./images/EnemyShip.png",
 "./images/Highscore.png" };
 
-void init_opengl(void) {
+void init_opengl(void) 
+{
     //OpenGL initialization
     glViewport(0, 0, gl.xres, gl.yres);
     //Initialize matrices
@@ -490,20 +495,22 @@ void init(void)
     */
 }
 
-void normalize2d(Vec v) {
+void normalize2d(Vec v) 
+{
     Flt len = v[0]*v[0] + v[1]*v[1];
     if (len == 0.0f) {
         v[0] = 1.0;
         v[1] = 0.0;
         return;
-}
+    }
     len = 1.0f / sqrt(len);
     v[0] *= len;
     v[1] *= len;
 }
 
-int check_keys(XEvent *e) {
-    static int shift=0;
+int check_keys(XEvent *e)
+{
+    static int shift = 0;
     if (e->type != KeyRelease && e->type != KeyPress) {
         //not a keyboard event
         return 0;
@@ -523,13 +530,13 @@ int check_keys(XEvent *e) {
             shift = 1;
             return 0;
         }
-}
-void pause_game();
-//extern void pause_game();
+    }
+
     (void)shift;
 
     // Movement Controls
-    if (!paused) {
+    extern void pause_game();
+    if (!gl.paused && !gl.BackgroundTitle && !gl.Highscore) {
         switch (key) {
             case XK_Left:
             extern void move_ship_left();
@@ -700,18 +707,6 @@ void shoot_bullets()
     }
 }
 
-
-// pause game on start up, resume when user clicks play
-// pause game on instruction screen & credit screen
-// ONLY resume when both instructions and credits are closed
-void pause_game() {
-    if (paused == 0) {
-        paused = 1;
-    } else if ((gl.show_instructions == 0) && (gl.show_credits == 0)){
-        paused = 0;
-    }
-}
-
 void deleteAsteroid(Game *g, Asteroid *node)
 {
 	//Remove a node from doubly-linked list
@@ -765,7 +760,8 @@ void buildAsteroidFragment(Asteroid *ta, Asteroid *a)
 	//std::cout << "frag" << std::endl;
 }
 
-void physics() {
+void physics() 
+{
     Flt d0,d1,dist;
     //Update ship position
     g.ship.pos[0] += g.ship.vel[0];
@@ -824,7 +820,7 @@ void physics() {
     }
 	//
 	//Update asteroid positions
-    if (!paused) {
+    if (!gl.paused && !gl.BackgroundTitle && !gl.Highscore) {
         Asteroid *a = g.ahead;
         extern int ship_enemy_collision(Asteroid *a);
         extern int enemy_boundary_check(Asteroid *a, float lives);
@@ -966,7 +962,7 @@ void render() {
     }
     // working on the start window
     if (gl.startUpDisplay) {
-    
+
         if (gl.Background1) {
             glColor3f(1.0, 1.0, 1.0);
             show_background(gl.xres,gl.yres,gl.Background1Texture);
@@ -1064,16 +1060,14 @@ void render() {
         extern void show_lives(float);
         show_lives(lives);
 
-
 	    // Time: 60 sec
         if (st > 0) {
-        extern void show_time(int);
-        show_time(st);
+            extern void show_time(int);
+            show_time(st);
             st -= 1;
-        }
-        else {
-        extern void show_timesup();
-        show_timesup();
+        } else {
+            extern void show_timesup();
+            show_timesup();
         }
 
         // Credit Screen

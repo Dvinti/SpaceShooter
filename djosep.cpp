@@ -54,6 +54,18 @@ void show_lives(float lives)
     ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
 }
 
+// pause game on start up, resume when user clicks play
+// pause game on instruction screen & credit screen
+// ONLY resume when both instructions and credits are closed
+void pause_game()
+{
+    if (!gl.paused) {
+        gl.paused = true;
+    } else if (!gl.show_instructions && !gl.show_credits) {
+        gl.paused = false;
+    }
+}
+
 /* Modified for easier use
 void init(int nbuttons)
 {

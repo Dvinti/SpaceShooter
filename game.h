@@ -28,6 +28,7 @@ class Global {
         int show_credits;
         int show_instructions;
         int startUpDisplay;
+        bool paused;
 
         int Background1;
         int Background2;
@@ -64,7 +65,6 @@ class Bullet {
     public:
         Bullet();
 };
-
 
 class Asteroid {
 public:
