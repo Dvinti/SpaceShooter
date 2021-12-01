@@ -65,19 +65,6 @@ class Bullet {
         Bullet();
 };
 
-class Enemy {
-    public:
-        Vec xpos;
-        Vec ypos;
-        Vec pos;
-        Vec dir;
-        Vec vel;
-        Vec acc;
-        float angle;
-        float color[1];
-    public:
-        Enemy();
-};
 
 class Asteroid {
 public:
@@ -99,11 +86,9 @@ class Game {
     public:
         Ship ship;
         Asteroid *ahead;
-        Enemy enemy[3];
         Bullet *barr;
         int nbullets;
         int nasteroids;
-        int nenemy;
         struct timespec bulletTimer;
     public:
         Game();

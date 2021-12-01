@@ -45,13 +45,13 @@ void show_scores(int score)
     ggprint13(&r, 16, 0xfbfbfa, "      <%0.4i>      ", score);
 }
 
-void show_lives(int lives)
+void show_lives(float lives)
 {
     Rect r;
     r.bot = gl.yres - 675;
     r.left = 125;
     r.center = 0;
-    ggprint8b(&r, 16, 0xfbfbfa, "%i", lives);
+    ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
 }
 
 /* Modified for easier use

@@ -91,22 +91,6 @@ Ship::Ship() {
     color[0] = color[1] = color[2] = 1.0;
 };
 
-Enemy::Enemy() {
-    //seed random time
-    srand (time(NULL));
-    //rand()%(max-min + 1) + min;
-    for(int k = 0; k < MAX_ENEMIES; k++) {
-        xpos[k] = (Flt)(rand() % (815 - 185 + 1) + 185);
-        ypos[k] = (Flt)(gl.yres/1.1589362);
-    }
-    pos[2] = 0.0f;
-    VecZero(dir);
-    VecZero(vel);
-    VecZero(acc);
-    angle = 180;
-    color[0] = color[1] = color[2] = 1.0;
-};
-
 Bullet::Bullet() {};
 
 Asteroid::Asteroid() {
@@ -119,7 +103,6 @@ Game::Game() {
     barr = new Bullet[MAX_BULLETS];
     nasteroids = 0;
     nbullets = 0;
-    nenemy = 7;
     srand (time(NULL));
     //build Asteroids...
     for (int j = 0; j < 5; j++) {
@@ -287,7 +270,7 @@ void render();
 /* Initialize */
 int score = 0;
 int highscore = 0;
-int lives = 3;
+float lives = 3.0;
 
 /* Booleans */
 bool paused = false;
@@ -540,7 +523,8 @@ int check_keys(XEvent *e) {
             return 0;
         }
 }
-
+void pause_game();
+//extern void pause_game();
     (void)shift;
 
     // Movement Controls
@@ -578,16 +562,17 @@ int check_keys(XEvent *e) {
         case XK_s:
             extern void instruct_toggle();
             instruct_toggle();
+            pause_game();
             break;
         case XK_c:
             extern void credit_toggle();
             credit_toggle();
+            pause_game();
             break;
         case XK_q:
             done = 1;
             break;
         case XK_p:
-            void pause_game();
             pause_game();
             break;
 	}
@@ -714,10 +699,14 @@ void shoot_bullets()
     }
 }
 
+
+// pause game on start up, resume when user clicks play
+// pause game on instruction screen & credit screen
+// ONLY resume when both instructions and credits are closed
 void pause_game() {
     if (paused == 0) {
         paused = 1;
-    } else {
+    } else if ((gl.show_instructions == 0) && (gl.show_credits == 0)){
         paused = 0;
     }
 }
@@ -771,7 +760,7 @@ void buildAsteroidFragment(Asteroid *ta, Asteroid *a)
 	ta->color[1] = 0.8;
 	ta->color[2] = 0.7;
 	ta->vel[0] = a->vel[0] + (rnd()*2.0-1.0);
-	ta->vel[1] = a->vel[1] + (rnd()*2.0-1.0);
+	ta->vel[1] = abs(a->vel[1] + (rnd()*2.0-1.0));
 	//std::cout << "frag" << std::endl;
 }
 
@@ -813,33 +802,41 @@ void physics() {
 
 //********************************WE CAN DELETE THIS***********************************************************
         if (b->pos[0] < 0.0) {
+            cout << "IF STATEMENT USED" << endl;
             b->pos[0] += (float)gl.xres;
         }
         else if (b->pos[0] > (float)gl.xres) {
+            cout << "IF STATEMENT USED" << endl;
             b->pos[0] -= (float)gl.xres;
         }
         else if (b->pos[1] < 0.0) {
-            cout << "out of bounds bottom" << endl;
+            cout << "IF STATEMENT USED" << endl;
             //b->pos[1] += (float)gl.yres;
         }
         else if (b->pos[1] > (float)gl.yres) {
+            cout << "IF STATEMENT USED" << endl;
             //b->pos[1] -= (float)gl.yres;
             //break; //We can kill the bullets this way but its laggy
         }
 //***********************************************************************************************************        
-        extern int check_bullet_collision(int i, Bullet *b, int score, int MAX_ENEMIES);
-        score = check_bullet_collision(i, b, score, MAX_ENEMIES);
         ++i;
     }
 	//
 	//Update asteroid positions
     if (!paused) {
         Asteroid *a = g.ahead;
-        extern int enemy_boundary_check(Asteroid *a, int lives);
+        extern int ship_enemy_collision(Asteroid *a);
+        extern int enemy_boundary_check(Asteroid *a, float lives);
         while (a) {
             a->pos[0] += a->vel[0];
             a->pos[1] += a->vel[1];
-            lives = enemy_boundary_check(a, lives);
+            enemy_boundary_check(a, lives);
+            //if collision happened reduce lives
+            if (ship_enemy_collision(a) == true) {
+                lives -= 0.5;
+                score += 25;
+                cout << "returned true" << endl;
+            }
             a->angle += a->rotate;
             a = a->next;
         }
@@ -879,7 +876,9 @@ void physics() {
                             g.ahead = ta;
                             g.nasteroids++;
                         }
-                    } else {
+                        score += 100;
+                    } 
+                    else {
                         a->color[0] = 1.0;
                         a->color[1] = 0.1;
                         a->color[2] = 0.1;
@@ -889,7 +888,7 @@ void physics() {
                         deleteAsteroid(&g, a);
                         a = savea;
                         g.nasteroids--;
-                        score++;
+                        score += 50;
                     }
                     //delete the bullet...
                     memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
@@ -974,50 +973,11 @@ void render() {
     
         // Show UI
         extern void show_ui();
+        extern void shooting_line();
         show_ui();
+        shooting_line();
 
-        // Show Instructions
-        if (gl.show_instructions) {
-            extern void show_instructions();
-            show_instructions();
-        } else {
-            extern void instructions();
-            instructions();
-        }
-
-        // Calculate Score
-        extern void show_scores(int);
-        show_scores(score);
-
-        // Calculate Lives
-        extern void show_lives(int);
-        show_lives(lives);
-
-        // Credit Screen
-        if (gl.show_credits) {
-            // Clears the Screen
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            // Shows the student's credit
-            r.bot = gl.yres - 80;
-            r.left = (gl.xres/2) - 20;
-            r.center = 0;
-            ggprint16(&r, 16, 0x00a1ee, "Credits");
-            show_Daniels_credits(gl.xres/2, gl.yres/2);
-            show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
-            show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
-            show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
-            show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
-
-            // Instructions
-            r.bot = gl.yres - 20;
-            r.left = 10;
-            r.center = 0;
-            ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
-        }
-
-        //--------------------------------------------------------------------
-        //Draw the ship
+        //Draw the user's ship
         {
             glColor3fv(g.ship.color);
             glPushMatrix();
@@ -1041,6 +1001,7 @@ void render() {
         }
 
         //--------------------------------------------------------------------
+        //Draw the enemy ships
         Asteroid *a = g.ahead;
         while (a)  {
             //Log("draw asteroid...\n");
@@ -1066,34 +1027,6 @@ void render() {
             a = a->next;
         }
         
-        //--------------------------------------------------------------------
-        
-        //Draw the enemy ship, rows = 3, col = 6
-        for(int i = 0; i < MAX_ENEMIES; i++) {
-            //cout << "enemy ship rendered" << endl;
-            glColor3fv(g.enemy[i].color);
-            glPushMatrix();
-            glTranslatef(g.enemy[i].xpos[i], g.enemy[i].ypos[i], g.enemy[i].pos[2]);
-            //cout << "enemy pos " << g.enemy[i].pos[0] << " " << g.enemy[i].pos[1] << endl;
-            glRotatef(g.enemy[i].angle, 0.0f, 0.0f, 1.0f);
-            glBegin(GL_TRIANGLES);
-            glVertex2f(-12.0f, -10.0f);
-            glVertex2f(  0.0f,  20.0f);
-            glVertex2f(  0.0f,  -6.0f);
-            glVertex2f(  0.0f,  -6.0f);
-            glVertex2f(  0.0f,  20.0f);
-            glVertex2f( 12.0f, -10.0f);
-            glEnd();
-            glColor3f(1.0f, 0.0f, 0.0f);
-            glBegin(GL_POINTS);
-            glVertex2f(5.0f, 0.0f);
-            glEnd();
-            glPopMatrix();
-            glEnd();
-        }
-        
-        //-------------------------------------------------------------------------
-
         //Draw the bullets
         for (int i = 0; i < g.nbullets; i++) {
             Bullet *b = &g.barr[i];
@@ -1112,9 +1045,49 @@ void render() {
             glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
             glEnd();
         }
+
+        // Show Instructions
+        if (gl.show_instructions) {
+            extern void show_instructions();
+            show_instructions();
+        } else {
+            extern void instructions();
+            instructions();
+        }
+
+        // Calculate Score
+        extern void show_scores(int);
+        show_scores(score);
+
+        // Calculate Lives
+        extern void show_lives(float);
+        show_lives(lives);
+
+        // Credit Screen
+        if (gl.show_credits) {
+            // Clears the Screen
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // Shows the student's credit
+            r.bot = gl.yres - 80;
+            r.left = (gl.xres/2) - 20;
+            r.center = 0;
+            ggprint16(&r, 16, 0x00a1ee, "Credits");
+            show_Daniels_credits(gl.xres/2, gl.yres/2);
+            show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
+            show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
+            show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
+            show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
+
+            // Instructions
+            r.bot = gl.yres - 20;
+            r.left = 10;
+            r.center = 0;
+            ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
+        }
     }
 
-    if (lives < 0) {
+    if (lives <= 0) {
         gl.Highscore = 1;
         glColor3f(1.0, 1.0, 1.0);
         show_background(gl.xres,gl.yres,gl.HighscoreTexture);
