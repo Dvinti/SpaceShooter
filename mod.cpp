@@ -27,24 +27,6 @@ const int MAX_ENEMIES = 0;
 #define ALPHA 1
 const Flt MINIMUM_ASTEROID_SIZE = 20.0;
 
-/* Used to create the buttons */
-int lbutton = 0;
-int rbutton = 0;
-#define nbuttons 3
-
-typedef struct t_button {
-    Rect r;
-    char text[32];
-    int over;
-    int down;
-    int click;
-    float color[3];
-    float dcolor[3];
-    unsigned int text_color;
-} Button;
-
-Button button[4];
-
 //-------------------------------------------------------------------------
 //Setup timers
 const double physicsRate = 1.0 / 60.0;
@@ -149,7 +131,7 @@ Game::~Game() {
 Game g;
 
 /* Prototype */
-void init();
+extern void init();
 
 //X Windows variables
 class X11_wrapper 
@@ -267,7 +249,7 @@ class X11_wrapper
 //function prototypes
 void init_opengl(void);
 int check_keys(XEvent *e);
-void check_mouse(XEvent *e);
+extern void check_mouse(XEvent *e);
 void physics();
 void render();
 
@@ -413,88 +395,6 @@ void init_opengl(void)
     free(Highscore);
 }
 
-void init(void)
-{
-    for (int i = 1; i < nbuttons; i++) {
-        button[i].r.width = gl.xres/gl.xres + 199;
-        button[0].r.height = gl.yres/gl.yres + 50;
-        button[1].r.height = gl.yres/gl.yres + 80;
-        button[i].r.left = gl.xres - 210;
-        button[0].r.bot = gl.yres - 60;
-        button[1].r.bot = gl.yres/700 + 10;
-        button[i].r.right =
-            button[i].r.left + button[i].r.width;
-        button[i].r.top = button[i].r.bot + button[i].r.height;
-        button[i].r.centerx =
-            (button[i].r.left + button[i].r.right) / 2;
-        button[i].r.centery =
-            (button[i].r.bot + button[i].r.top) / 2;
-        //strcpy(button[0].text, "Quit");
-        if (gl.BackgroundTitle)
-            strcpy(button[1].text, "Play");
-        if (gl.Highscore)
-            strcpy(button[2].text, "Credits");
-        button[i].down = 0;
-        button[i].click = 0;
-        button[i].color[0] = 0.4f;
-        button[i].color[1] = 0.4f;
-        button[i].color[2] = 0.7f;
-        button[i].dcolor[0] = button[i].color[0] * 0.5f;
-        button[i].dcolor[1] = button[i].color[1] * 0.5f;
-        button[i].dcolor[2] = button[i].color[2] * 0.5f;
-        button[i].text_color = 0x00ffffff;
-    }
-/*
-    if (gl.BackgroundTitle) {
-        button[1].r.width = gl.xres/gl.xres + 199;
-        button[1].r.height = gl.yres/gl.yres + 80;
-        button[1].r.left = gl.xres - 210;
-        button[1].r.bot = gl.yres/700 + 10;
-        button[1].r.right =
-            button[1].r.left + button[1].r.width;
-        button[1].r.top = button[1].r.bot + button[1].r.height;
-        button[1].r.centerx =
-            (button[1].r.left + button[1].r.right) / 2;
-        button[1].r.centery =
-            (button[1].r.bot + button[1].r.top) / 2;
-        strcpy(button[1].text, "Play");
-        button[1].down = 0;
-        button[1].click = 0;
-        button[1].color[0] = 0.4f;
-        button[1].color[1] = 0.4f;
-        button[1].color[2] = 0.7f;
-        button[1].dcolor[0] = button[1].color[0] * 0.5f;
-        button[1].dcolor[1] = button[1].color[1] * 0.5f;
-        button[1].dcolor[2] = button[1].color[2] * 0.5f;
-        button[1].text_color = 0x00ffffff;
-    }
-
-    if (gl.Highscore) {
-        button[2].r.width = gl.xres/gl.xres + 199;
-        button[2].r.height = gl.yres/gl.yres + 80;
-        button[2].r.left = gl.xres - 210;
-        button[2].r.bot = gl.yres/700 + 10;
-        button[2].r.right =
-            button[2].r.left + button[2].r.width;
-        button[2].r.top = button[2].r.bot + button[2].r.height;
-        button[2].r.centerx =
-            (button[2].r.left + button[2].r.right) / 2;
-        button[2].r.centery =
-            (button[2].r.bot + button[2].r.top) / 2;
-        strcpy(button[2].text, "Credits");
-        button[2].down = 0;
-        button[2].click = 0;
-        button[2].color[0] = 0.4f;
-        button[2].color[1] = 0.4f;
-        button[2].color[2] = 0.7f;
-        button[2].dcolor[0] = button[2].color[0] * 0.5f;
-        button[2].dcolor[1] = button[2].color[1] * 0.5f;
-        button[2].dcolor[2] = button[2].color[2] * 0.5f;
-        button[2].text_color = 0x00ffffff;
-    }
-    */
-}
-
 void normalize2d(Vec v) 
 {
     Flt len = v[0]*v[0] + v[1]*v[1];
@@ -585,95 +485,6 @@ int check_keys(XEvent *e)
             break;
 	}
     return 0;
-}
-
-void mouse_click(int action)
-{
-    int i;
-    if (action == 1) {
-        for (i = 0; i < nbuttons; i++) {
-            if (button[i].over) {
-                button[i].down = 1;
-                button[i].click = 1;
-                if (i == 0) {
-                    //user clicked Quit
-                    //done = 1;
-                }
-                if (i == 1) {
-                    //user clicked Play
-                    if (gl.BackgroundTitle == 1) {
-                        gl.BackgroundTitle = 0;
-                        gl.Background1 = 1;
-                        extern void startWindow();
-                        startWindow();
-                    }
-                }
-                if (i == 2) {
-                    if (gl.Highscore) {
-                        extern void credit_toggle();
-                        credit_toggle();
-                    } 
-                }
-                if (i == 3) {
-                    if (gl.show_credits == 0) {
-                        done = 1;
-                    }
-                }
-            }
-        }
-    }
-    if (action == 2) {
-        for (i = 0; i < nbuttons; i++) {
-            button[i].down = 0;
-            button[i].click = 0;
-        }
-    }
-}
-
-void check_mouse(XEvent *e)
-{
-    static int savex = 0;
-	static int savey = 0;
-    //Log("check_mouse()...\n");
-    int x,y;
-    int i;
-    lbutton = 0;
-    rbutton = 0;
-    if (e->type == ButtonRelease) {
-		mouse_click(2);
-		return;
-	}
-    if (e->type == ButtonPress) {
-        if (e->xbutton.button == 1) {
-            //Left button is down
-            lbutton = 1;
-        }
-    }
-    x = e->xbutton.x;
-    y = e->xbutton.y;
-    //reverse the y position
-    y = gl.yres - y;
-    if (savex != e->xbutton.x || savey != e->xbutton.y) {
-        //Mouse moved
-        savex = e->xbutton.x;
-        savey = e->xbutton.y;
-    }
-    //Log("check over %i buttons\n", nbuttons);
-    for (i = 0; i < nbuttons; i++) {
-        button[i].over = 0;
-        button[i].down = 0;
-        //Log("xy: %i %i\n",x,y);
-        if (x >= button[i].r.left &&
-            x <= button[i].r.right &&
-            y >= button[i].r.bot &&
-            y <= button[i].r.top) {
-            button[i].over = 1;
-            //Log("over button: %i\n", i);
-            break;
-        }
-    }
-    if (lbutton)
-		mouse_click(1);
 }
 
 void shoot_bullets() 
@@ -924,41 +735,8 @@ void render() {
         glColor3f(1.0, 1.0, 1.0);
         show_background(gl.xres,gl.yres,gl.BackgroundTitleTexture);
 
-        /* Button Use */
-        for (int i = 0; i < 2; i++) {
-            /* Draws a Border Highlight */
-            if (button[i].over) {
-                glColor3f(1.0f, 0.0f, 0.0f);
-                glLineWidth(2);
-                glBegin(GL_LINE_LOOP);
-                    glVertex2i(button[i].r.left-2,  button[i].r.bot-2);
-                    glVertex2i(button[i].r.left-2,  button[i].r.top+2);
-                    glVertex2i(button[i].r.right+2, button[i].r.top+2);
-                    glVertex2i(button[i].r.right+2, button[i].r.bot-2);
-                    glVertex2i(button[i].r.left-2,  button[i].r.bot-2);
-                glEnd();
-                glLineWidth(1);
-            }
-            if (button[i].down) {
-                glColor3fv(button[i].dcolor);
-            } else {
-                glColor3fv(button[i].color);
-            }
-            glBegin(GL_QUADS);
-                glVertex2i(button[i].r.left,  button[i].r.bot);
-                glVertex2i(button[i].r.left,  button[i].r.top);
-                glVertex2i(button[i].r.right, button[i].r.top);
-                glVertex2i(button[i].r.right, button[i].r.bot);
-            glEnd();
-            r.left = button[i].r.centerx;
-            r.bot  = button[i].r.centery-8;
-            r.center = 1;
-            if (button[i].down) {
-                ggprint16(&r, 0, button[i].text_color, "Pressed!");
-            } else {
-                ggprint16(&r, 0, button[i].text_color, button[i].text);
-            }
-        }
+        extern void PlayButton();
+        PlayButton();
     }
     // working on the start window
     if (gl.startUpDisplay) {
@@ -1100,6 +878,7 @@ void render() {
         show_background(gl.xres,gl.yres,gl.HighscoreTexture);
 
         if (gl.Highscore) {
+            /*
             if (button[2].over) {
                 glColor3f(1.0f, 0.0f, 0.0f);
                 glLineWidth(2);
@@ -1130,7 +909,7 @@ void render() {
                 ggprint16(&r, 0, button[2].text_color, "Pressed!");
             } else {
                 ggprint16(&r, 0, button[2].text_color, button[2].text);
-            }
+            }*/
         }
 
         r.bot = gl.yres - 285;
