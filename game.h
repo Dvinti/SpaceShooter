@@ -8,19 +8,6 @@ typedef float Flt;
 typedef float Vec[3];
 typedef Flt Matrix[4][4];
 
-/*
-typedef struct t_button {
-	Rect r;
-	char text[32];
-	int over;
-	int down;
-	int click;
-	float color[3];
-	float dcolor[3];
-	unsigned int text_color;
-};
-*/
-
 //macros
 #define rnd() (((Flt)rand())/(Flt)RAND_MAX)
 #define random(a) (rand()%a)
@@ -31,7 +18,6 @@ typedef struct t_button {
 #define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
                         (c)[1]=(a)[1]-(b)[1]; \
                         (c)[2]=(a)[2]-(b)[2]
-
 
 //const int MAX_ENEMIE = 4;
 
