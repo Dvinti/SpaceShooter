@@ -623,7 +623,7 @@ void physics() {
 		a->angle += a->rotate;
 		a = a->next;
 	}
-    cout << "lives: " << lives << endl;
+    //cout << "lives: " << lives << endl;
 	//
 	//Asteroid collision with bullets?
 	//If collision detected:
@@ -734,6 +734,10 @@ void render() {
         // Calculate Score
         extern void show_scores(int);
         show_scores(score);
+
+        // Calculate Lives
+        extern void show_lives(int);
+        show_lives(lives);
 
         // Credit Screen
         if (gl.show_credits) {
