@@ -271,6 +271,7 @@ void render();
 int score = 0;
 int highscore = 0;
 float lives = 3.0;
+int st = 60;
 
 /* Booleans */
 bool paused = false;
@@ -1062,6 +1063,18 @@ void render() {
         // Calculate Lives
         extern void show_lives(float);
         show_lives(lives);
+
+
+	    // Time: 60 sec
+        if (st > 0) {
+        extern void show_time(int);
+        show_time(st);
+            st -= 1;
+        }
+        else {
+        extern void show_timesup();
+        show_timesup();
+        }
 
         // Credit Screen
         if (gl.show_credits) {
