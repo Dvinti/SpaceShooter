@@ -33,7 +33,7 @@ const Flt MINIMUM_ASTEROID_SIZE = 20.0;
 int done = 0;
 int lbutton = 0;
 int rbutton = 0;
-#define nbuttons 2
+#define nbuttons 3
 
 typedef struct t_button {
     Rect r;
@@ -46,7 +46,8 @@ typedef struct t_button {
     unsigned int text_color;
 } Button;
 
-Button button[nbuttons];
+Button button[4];
+
 
 //-------------------------------------------------------------------------
 //Setup timers
@@ -73,10 +74,10 @@ Global::Global() {
     show_credits = 0;
     show_instructions =0;
     startUpDisplay =0;
-    Background1 = 1;
-    Background2 = 1;
+    Background1 = 0;
+    Background2 = 0;
     BackgroundTitle = 1;
-    Highscore = 1;
+    Highscore = 0;
 };
 
 Global gl;
@@ -122,8 +123,8 @@ Game::Game() {
     nbullets = 0;
     nenemy = 7;
     srand (time(NULL));
-    //build 10 asteroids...
-    for (int j=0; j<2; j++) {
+    //build Asteroids...
+    for (int j = 0; j < 5; j++) {
         Asteroid *a = new Asteroid;
         a->nverts = 3;  //number of vertices
         a->radius = 30.0; //size of asteroid
@@ -287,6 +288,7 @@ void render();
 
 /* Initialize */
 int score = 0;
+int highscore = 0;
 int lives = 3;
 
 //==========================================================================
@@ -307,7 +309,7 @@ int main() {
             check_mouse(&e);
             check_keys(&e);
         }
-	clock_gettime(CLOCK_REALTIME, &timeCurrent);
+	    clock_gettime(CLOCK_REALTIME, &timeCurrent);
         timeSpan = timeDiff(&timeStart, &timeCurrent);
         timeCopy(&timeStart, &timeCurrent);
         physicsCountdown += timeSpan;
@@ -436,8 +438,11 @@ void init(void)
             (button[i].r.left + button[i].r.right) / 2;
         button[i].r.centery =
             (button[i].r.bot + button[i].r.top) / 2;
-        strcpy(button[0].text, "Quit");
-        strcpy(button[1].text, "Play");
+        //strcpy(button[0].text, "Quit");
+        if (gl.BackgroundTitle)
+            strcpy(button[1].text, "Play");
+        if (gl.Highscore)
+            strcpy(button[2].text, "Credits");
         button[i].down = 0;
         button[i].click = 0;
         button[i].color[0] = 0.4f;
@@ -448,6 +453,55 @@ void init(void)
         button[i].dcolor[2] = button[i].color[2] * 0.5f;
         button[i].text_color = 0x00ffffff;
     }
+/*
+    if (gl.BackgroundTitle) {
+        button[1].r.width = gl.xres/gl.xres + 199;
+        button[1].r.height = gl.yres/gl.yres + 80;
+        button[1].r.left = gl.xres - 210;
+        button[1].r.bot = gl.yres/700 + 10;
+        button[1].r.right =
+            button[1].r.left + button[1].r.width;
+        button[1].r.top = button[1].r.bot + button[1].r.height;
+        button[1].r.centerx =
+            (button[1].r.left + button[1].r.right) / 2;
+        button[1].r.centery =
+            (button[1].r.bot + button[1].r.top) / 2;
+        strcpy(button[1].text, "Play");
+        button[1].down = 0;
+        button[1].click = 0;
+        button[1].color[0] = 0.4f;
+        button[1].color[1] = 0.4f;
+        button[1].color[2] = 0.7f;
+        button[1].dcolor[0] = button[1].color[0] * 0.5f;
+        button[1].dcolor[1] = button[1].color[1] * 0.5f;
+        button[1].dcolor[2] = button[1].color[2] * 0.5f;
+        button[1].text_color = 0x00ffffff;
+    }
+
+    if (gl.Highscore) {
+        button[2].r.width = gl.xres/gl.xres + 199;
+        button[2].r.height = gl.yres/gl.yres + 80;
+        button[2].r.left = gl.xres - 210;
+        button[2].r.bot = gl.yres/700 + 10;
+        button[2].r.right =
+            button[2].r.left + button[2].r.width;
+        button[2].r.top = button[2].r.bot + button[2].r.height;
+        button[2].r.centerx =
+            (button[2].r.left + button[2].r.right) / 2;
+        button[2].r.centery =
+            (button[2].r.bot + button[2].r.top) / 2;
+        strcpy(button[2].text, "Credits");
+        button[2].down = 0;
+        button[2].click = 0;
+        button[2].color[0] = 0.4f;
+        button[2].color[1] = 0.4f;
+        button[2].color[2] = 0.7f;
+        button[2].dcolor[0] = button[2].color[0] * 0.5f;
+        button[2].dcolor[1] = button[2].color[1] * 0.5f;
+        button[2].dcolor[2] = button[2].color[2] * 0.5f;
+        button[2].text_color = 0x00ffffff;
+    }
+    */
 }
 
 void normalize2d(Vec v) {
@@ -544,8 +598,20 @@ void mouse_click(int action)
                     //user clicked Play
                     if (gl.BackgroundTitle == 1) {
                         gl.BackgroundTitle = 0;
+                        gl.Background1 = 1;
                         extern void startWindow();
                         startWindow();
+                    }
+                }
+                if (i == 2) {
+                    if (gl.Highscore) {
+                        extern void credit_toggle();
+                        credit_toggle();
+                    } 
+                }
+                if (i == 3) {
+                    if (gl.show_credits == 0) {
+                        done = 1;
                     }
                 }
             }
@@ -839,7 +905,7 @@ void render() {
         show_background(gl.xres,gl.yres,gl.BackgroundTitleTexture);
 
         /* Button Use */
-        for (int i = 0; i < nbuttons; i++) {
+        for (int i = 0; i < 2; i++) {
             /* Draws a Border Highlight */
             if (button[i].over) {
                 glColor3f(1.0f, 0.0f, 0.0f);
@@ -930,25 +996,25 @@ void render() {
         //--------------------------------------------------------------------
         //Draw the ship
         {
-        glColor3fv(g.ship.color);
-        glPushMatrix();
-        glTranslatef(g.ship.pos[0], g.ship.pos[1], g.ship.pos[2]);
-        //float angle = atan2(ship.dir[1], ship.dir[0]);
-        glRotatef(g.ship.angle, 0.0f, 0.0f, 1.0f);
-        glBegin(GL_TRIANGLES);
-        glVertex2f(-12.0f, -10.0f);
-        glVertex2f(  0.0f,  20.0f);
-        glVertex2f(  0.0f,  -6.0f);
-        glVertex2f(  0.0f,  -6.0f);
-        glVertex2f(  0.0f,  20.0f);
-        glVertex2f( 12.0f, -10.0f);
-        glEnd();
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glBegin(GL_POINTS);
-        glVertex2f(0.0f, 0.0f);
-        glEnd();
-        glPopMatrix();
-        glEnd();
+            glColor3fv(g.ship.color);
+            glPushMatrix();
+            glTranslatef(g.ship.pos[0], g.ship.pos[1], g.ship.pos[2]);
+            //float angle = atan2(ship.dir[1], ship.dir[0]);
+            glRotatef(g.ship.angle, 0.0f, 0.0f, 1.0f);
+            glBegin(GL_TRIANGLES);
+                glVertex2f(-12.0f, -10.0f);
+                glVertex2f(  0.0f,  20.0f);
+                glVertex2f(  0.0f,  -6.0f);
+                glVertex2f(  0.0f,  -6.0f);
+                glVertex2f(  0.0f,  20.0f);
+                glVertex2f( 12.0f, -10.0f);
+            glEnd();
+            glColor3f(1.0f, 0.0f, 0.0f);
+            glBegin(GL_POINTS);
+            glVertex2f(0.0f, 0.0f);
+            glEnd();
+            glPopMatrix();
+            glEnd();
         }
 
         //--------------------------------------------------------------------
@@ -978,8 +1044,7 @@ void render() {
         }
         
         //--------------------------------------------------------------------
-
-
+        
         //Draw the enemy ship, rows = 3, col = 6
         for(int i = 0; i < MAX_ENEMIES; i++) {
             //cout << "enemy ship rendered" << endl;
@@ -1024,37 +1089,92 @@ void render() {
             glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
             glEnd();
         }
-        return;
 	}
-    
-    // Credit Screen
-    if (gl.show_credits) {
-        // Clears the Screen
-        glClear(GL_COLOR_BUFFER_BIT);
 
-        // Shows the student's credit
-        r.bot = gl.yres - 80;
-        r.left = (gl.xres/2) - 20;
-        r.center = 0;
-        ggprint16(&r, 16, 0x00a1ee, "Credits");
-        show_Daniels_credits(gl.xres/2, gl.yres/2);
-        show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
-        show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
-        show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
-        show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
+    if (lives < 3) {
+        gl.Highscore = 1;
+        glColor3f(1.0, 1.0, 1.0);
+        show_background(gl.xres,gl.yres,gl.HighscoreTexture);
 
-        // Instructions
-        r.bot = gl.yres - 20;
-        r.left = 10;
+        if (gl.Highscore) {
+            if (button[2].over) {
+                glColor3f(1.0f, 0.0f, 0.0f);
+                glLineWidth(2);
+                glBegin(GL_LINE_LOOP);
+                    glVertex2i(button[2].r.left-2,  button[2].r.bot-2);
+                    glVertex2i(button[2].r.left-2,  button[2].r.top+2);
+                    glVertex2i(button[2].r.right+2, button[2].r.top+2);
+                    glVertex2i(button[2].r.right+2, button[2].r.bot-2);
+                    glVertex2i(button[2].r.left-2,  button[2].r.bot-2);
+                glEnd();
+                glLineWidth(1);
+            }
+            if (button[2].down) {
+                glColor3fv(button[2].dcolor);
+            } else {
+                glColor3fv(button[2].color);
+            }
+            glBegin(GL_QUADS);
+                glVertex2i(button[2].r.left,  button[2].r.bot);
+                glVertex2i(button[2].r.left,  button[2].r.top);
+                glVertex2i(button[2].r.right, button[2].r.top);
+                glVertex2i(button[2].r.right, button[2].r.bot);
+            glEnd();
+            r.left = button[2].r.centerx;
+            r.bot  = button[2].r.centery-8;
+            r.center = 1;
+            if (button[2].down) {
+                ggprint16(&r, 0, button[2].text_color, "Pressed!");
+            } else {
+                ggprint16(&r, 0, button[2].text_color, button[2].text);
+            }
+        }
+
+        r.bot = gl.yres - 285;
+        r.left = 360;
         r.center = 0;
-        ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
+        ggprint40(&r, 16, 0xfbfbfa, "1. Daniel");
+
+        r.bot = gl.yres - 285;
+        r.left = 560;
+        r.center = 0;
+        if (score > highscore) {
+            ggprint40(&r, 16, 0xfbfbfa, "%0.4i", score);
+        } else {
+            ggprint40(&r, 16, 0xfbfbfa, "%0.4i", highscore);
+        }
+
+        r.bot = gl.yres - 380;
+        r.left = 360;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "2. Enrique");
+
+        r.bot = gl.yres - 380;
+        r.left = 555;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "0500");
+        
+        r.bot = gl.yres - 462;
+        r.left = 360;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "3. Jose");
+
+        r.bot = gl.yres - 462;
+        r.left = 565;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "0350");
+
+        r.bot = gl.yres - 545;
+        r.left = 370;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "4. Frankie");
+
+        r.bot = gl.yres - 545;
+        r.left = 570;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "0250");
     }
 
-    // Show Instructions
-    if (gl.show_instructions) {
-        extern void show_instructions();
-        show_instructions();
-    }
-    
+    return;
 }
 
