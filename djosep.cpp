@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <ctime>
 #include <cmath>
+#include <cstring>
 #include <GL/glut.h>
 #include "fonts.h"
 #include "game.h"
@@ -43,6 +44,16 @@ void show_scores(int score)
     r.center = 0;
     ggprint13(&r, 16, 0xfbfbfa, "      <%0.4i>      ", score);
 }
+
+void show_lives(int lives)
+{
+    Rect r;
+    r.bot = gl.yres - 675;
+    r.left = 125;
+    r.center = 0;
+    ggprint8b(&r, 16, 0xfbfbfa, "%i", lives);
+}
+
 /*
 void highscore(int score, string scorename)
 {
