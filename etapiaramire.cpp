@@ -123,7 +123,7 @@ void show_enrique_credits(int x, int y)
 void shooting_line() {
 	// Minimum shooting distance
 	Rect r;
-	r.bot = gl.yres - 590;
+	r.bot = gl.yres - 555;
 	r.left = 0;
 	r.center = 0;
 	ggprint8b(&r, 16, 0x2a2a2a, "                                             "
