@@ -279,7 +279,11 @@ void show_lives(float lives)
     r.bot = gl.yres - 675;
     r.left = 125;
     r.center = 0;
-    ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
+    
+    if (lives > 1.5)
+	ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
+    else 
+	ggprint8b(&r, 16, 0xe92b36, "%0.2f", lives);
 }
 
 // pause game on start up, resume when user clicks play
