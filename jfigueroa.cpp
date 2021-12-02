@@ -8,7 +8,7 @@
 
 extern Global gl;  
 
-void show_time(int st)
+void show_time(float st)
  {
     Rect r;
     // ****
@@ -17,24 +17,24 @@ void show_time(int st)
     r.center = 0;
     ggprint13(&r, 16, 0xfbfbfa, "* * * * * * * * * * * *");
 
-    // Time
+    // Time 30 sec
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+355;
     r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "TIME: ", "%i", st);
+    ggprint13(&r, 16, 0xfbfbfa, "TIME: ");
 
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+405;
     r.center = 0;
     
     if (st > 15)
-	ggprint13(&r, 16, 0xfbfbfa, "%i", st);
+	ggprint13(&r, 16, 0xfbfbfa, "%0.2f", st);
     else
-	ggprint13(&r, 16, 0xe92b36, "%i", st);
+	ggprint13(&r, 16, 0xe92b36, "%0.2f", st);
 	
     // sec
     r.bot = gl.yres/2;
-    r.left = (gl.xres/2)+425;
+    r.left = (gl.xres/2)+450;
     r.center = 0;
     ggprint8b(&r, 16, 0xfbfbfa, "sec ");
 

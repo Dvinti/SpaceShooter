@@ -257,7 +257,7 @@ void render();
 int score = 0;
 int highscore = 0;
 float lives = 3.0;
-int st = 60;
+float st = 30.0;
 
 /* Booleans */
 bool done = false;
@@ -866,11 +866,11 @@ void render() {
         extern void show_lives(float);
         show_lives(lives);
 
-	    // Time: 60 sec
+	    // Time: 30 sec
         if (st > 0) {
-            extern void show_time(int);
+            extern void show_time(float);
             show_time(st);
-            st -= 1;
+            st -= 0.01;
         } else {
             extern void show_timesup();
             show_timesup();
