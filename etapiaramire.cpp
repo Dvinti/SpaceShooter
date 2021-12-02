@@ -26,76 +26,55 @@ void credit_toggle() {
 }
 
 void move_ship_left() {
-        g.ship.pos[0] += -8.0;
-        cout << "<--" << g.ship.pos[0] << endl;
-        if (g.ship.pos[0] < 220) {
-                cout << "|<-- out of bounds" << endl;
-                g.ship.pos[0] = 230;
-        }
-        else if (g.ship.pos[0] > 780) {
-                cout << "out of bounds -->|" << endl;
-                g.ship.pos[0] = 770;
-        }
+	g.ship.pos[0] += -8.0;
+	cout << "<--" << g.ship.pos[0] << endl;
+	if (g.ship.pos[0] < 185) {
+		cout << "|<-- out of bounds" << endl;
+		g.ship.pos[0] = 190;
+	}
+	else if (g.ship.pos[0] > 815) {
+		cout << "out of bounds -->|" << endl;
+		g.ship.pos[0] = 810;
+	}
 }
 
 void move_ship_right() {
-        g.ship.pos[0] += 8.0;
-        cout << "-->" << g.ship.pos[0] << endl;
-        if (g.ship.pos[0] < 220) {
-                cout << "|<-- out of bounds" << endl;
-                g.ship.pos[0] = 230;
-        }
-        else if (g.ship.pos[0] > 780) {
-                cout << "out of bounds -->|" << endl;
-                g.ship.pos[0] = 770;
-        }
+	g.ship.pos[0] += 8.0;
+		cout << "-->" << g.ship.pos[0] << endl;
+		if (g.ship.pos[0] < 185) {
+			cout << "|<-- out of bounds" << endl;
+			g.ship.pos[0] = 190;
+		}
+		else if (g.ship.pos[0] > 815) {
+			cout << "out of bounds -->|" << endl;
+			g.ship.pos[0] = 810;
+		}
 }
 
 int enemy_boundary_check(Asteroid *a) {
-        //keeps enemy from going out of bounds
-        //reaches left edge
-        if (a->pos[0] < 220.0) {
-                a->vel[0] = -a->vel[0];
-        }
-        //reaches right edge
-        else if (a->pos[0] > 780.0) {
-                a->vel[0] = -a->vel[0];
-        }
-        //reaches bottom of screen
-        else if (a->pos[1] < gl.yres-525) {
-
-                a->vel[1] = -a->vel[1];
-        //      a->pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
-        //      a->pos[1] = (Flt)(gl.yres/1.1589362);
-        //      a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
-        //      a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
-                cout << "Enemy reached the threashold, reducing lives" << endl;
-                return true;
-                /*
-                     CAUSING SEGMENTATION FAULT
-                     if (g.nasteroids == 1) {
-                     cout << "Game Over!" << endl;
-                     break;
-                     }
-                     else if (g.nasteroids == 2) {
-                     cout << "Last one: " << g.nasteroids << endl;
-                     deleteAsteroid(&g, a);
-                     g.nasteroids--;
-                     }
-                     else {
-                     cout << "Asteroid: " << g.nasteroids << endl;
-                     Asteroid *savea = a->next;
-                     deleteAsteroid(&g, a);
-                     a = savea;
-                     g.nasteroids--;
-                     }
-                     */
-        }
-        //reaches top of screen
-        else if (a->pos[1] > (float)gl.yres - 95) {
-                a->vel[1] = -a->vel[1];
-        }
-        return false;
+	//keeps enemy from going out of bounds
+	//reaches left edge
+	if (a->pos[0] < 200.0) {
+		a->vel[0] = -a->vel[0];
+	}
+	//reaches right edge
+	else if (a->pos[0] > 800.0) {
+		a->vel[0] = -a->vel[0];
+	}
+	//reaches bottom of screen
+	else if (a->pos[1] < gl.yres - 650.0) {
+		a->pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
+		a->pos[1] = (Flt)(gl.yres/1.1589362);
+		a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
+		a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
+		cout << "Enemy reached the threashold, reducing lives" << endl;	
+		return true;
+	}
+	//reaches top of screen
+	else if (a->pos[1] > (float)gl.yres - 75.0) {
+		a->vel[1] = -a->vel[1];
+	}
+	return false;
 }
 
 
@@ -123,7 +102,7 @@ void show_enrique_credits(int x, int y)
 void shooting_line() {
 	// Minimum shooting distance
 	Rect r;
-	r.bot = gl.yres - 555;
+	r.bot = gl.yres - 570;
 	r.left = 0;
 	r.center = 0;
 	ggprint8b(&r, 16, 0x2a2a2a, "                                             "
@@ -135,25 +114,25 @@ extern void deleteAsteroid(Game *g, Asteroid *node);
 extern void buildAsteroidFragment(Asteroid *ta, Asteroid *a);
 
 int ship_enemy_collision(Asteroid *a) {
-	int x, y, dist;
-	//int x1, x2, y1, y2;		//ship hitbox
-	//int Ex1, Ex2, Ey1, Ey2; //enemy hitbox
+	//int x, y, dist;
+	int x1, x2, y1, y2;		//ship hitbox
+	int Ex1, Ex2, Ey1, Ey2; //enemy hitbox
 
 	//create a hitbox for the ship
-//	x1 = g.ship.pos[0] - (30);
-//	x2 = g.ship.pos[0] + (30);
-//	y1 = g.ship.pos[1] - (30);
-//	y2 = g.ship.pos[1] + (30);
-//
-//	//create a hitbox for the enemy
-//	Ex1 = a->pos[0] - (30);
-//	Ex2 = a->pos[0] + (30);
-//	Ey1 = a->pos[1] - (30);
-//	Ey2 = a->pos[1] + (30);
+	x1 = g.ship.pos[0] - 30;	//left
+	x2 = g.ship.pos[0] + 30; //right
+	y1 = g.ship.pos[1] - 30; //top
+	y2 = g.ship.pos[1] + 30; //bottom
 
-	x = g.ship.pos[0] - a->pos[0];
-	y = g.ship.pos[1] - a->pos[1];
-	dist = (x*x + y*y);
+	//create a hitbox for the enemy
+	Ex1 = a->pos[0] - 30; //left
+	Ex2 = a->pos[0] + 30; //right
+	Ey1 = a->pos[1] - 30; //top
+	Ey2 = a->pos[1] + 30; //bottom
+
+//	x = g.ship.pos[0] - a->pos[0];
+//	y = g.ship.pos[1] - a->pos[1];
+//	dist = (x*x + y*y);
 
 
 	//check if the hitboxes intersect
@@ -174,13 +153,13 @@ int ship_enemy_collision(Asteroid *a) {
 		return true;
 	}*/
 
+	//check for collision
+		if (x1 < Ex2 &&
+				x2 > Ex1 &&
+				y1 < Ey2 &&
+				y2 > Ey1) {
 
-//	if (x1 < Ex2 &&
-//			x2 > Ex1 &&
-//			y1 < Ey2 &&
-//			y2 > Ey1) {
-
-	if (dist < (30*30)) {
+//	if (dist < (30*30)) {
 			cout << "Collision!" << endl;
 			//if they do, then spawn baby enemies
 
@@ -218,7 +197,6 @@ int ship_enemy_collision(Asteroid *a) {
 	return false;
 }
 
-
 int checkpoint = 300;
 int score_new_lives(int score, float lives) {
 	if (score >= checkpoint && lives < 7.0) {
@@ -234,6 +212,7 @@ int score_new_lives(int score, float lives) {
 	}
 	return lives;
 }
+
 int score_new_lives_type2(int score) {
 	if (score >= checkpoint) {
 		//eligible for new lives

@@ -34,13 +34,11 @@ class Global {
         int Background2;
         int BackgroundTitle;
         int Highscore;
-        int CreditScreen;
 
         GLuint Background1Texture;
         GLuint Background2Texture;
         GLuint BackgroundTitleTexture;
         GLuint HighscoreTexture;
-        GLuint CreditScreenTexture;
         GLuint EnemyTexture;
         GLuint MainShipTexture;
         GLuint LaserTexture;
