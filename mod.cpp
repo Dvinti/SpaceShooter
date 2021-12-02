@@ -893,10 +893,7 @@ void render() {
 			extern void show_time(float);
 			show_time(st);
 			st -= 0.01;
-		} else {
-			extern void show_timesup();
-			show_timesup();
-			}
+		} 
 		}
 		// Credit Screen
 		if (gl.show_credits) {
