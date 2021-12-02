@@ -523,6 +523,14 @@ int check_keys(XEvent *e)
 		case XK_p:
 			pause_game();
 			break;
+		case XK_r:
+			if (gl.Highscore) {
+				gl.Highscore = 0;
+				gl.startUpDisplay = 1;
+				lives = 6.0;
+				st = 30.0;
+			}
+			break;
 	}
 	return 0;
 }
@@ -927,7 +935,7 @@ void render() {
 		}
 	}
 
-	if (lives <= 0) {
+	if (lives <= 3 || st < 30) {
 		gl.Highscore = 1;
 		glColor3f(1.0, 1.0, 1.0);
 		show_background(gl.xres,gl.yres,gl.HighscoreTexture);
