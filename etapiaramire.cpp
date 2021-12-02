@@ -219,9 +219,9 @@ int ship_enemy_collision(Asteroid *a) {
 
 int checkpoint = 300;
 int score_new_lives(int score, float lives) {
-	if (score >= checkpoint && lives < 4.0) {
-		if (lives > 3.0){
-			lives = 4.0;
+	if (score >= checkpoint && lives < 7.0) {
+		if (lives > 6.0){
+			lives = 7.0;
 			cout << "new lives added"<<endl<<endl;
 		}
 		else{

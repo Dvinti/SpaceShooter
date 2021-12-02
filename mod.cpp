@@ -256,7 +256,7 @@ void render();
 /* Initialize */
 int score = 0;
 int highscore = 0;
-float lives = 10.0;
+float lives = 6.0;
 float st = 30.0;
 
 /* Booleans */
@@ -691,8 +691,8 @@ void physics()
 				cout << "collision true lives after deduction: " << lives << endl;
 				score += 25;
 				if (score_new_lives_type2(score) == true) {
-					if (lives > 3.0)
-						lives = 4.0;
+					if (lives > 6.0)
+						lives = 7.0;
 					else
 						lives += 1.0;
 					cout << "type 2: new lives added"<<endl<<endl;
