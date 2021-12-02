@@ -552,7 +552,7 @@ int check_keys(XEvent *e)
 				}
 				gl.startUpDisplay = 1;
 				lives = 6.0;
-				st = 60.0;
+				st = 30.0;
 			}
 			break;
 		case XK_o:
@@ -803,6 +803,8 @@ void render() {
 
 	/* Title Screen */
 	if (gl.BackgroundTitle) {
+
+		// Custom Artwork for our Title Screen
 		glColor3f(1.0, 1.0, 1.0);
 		show_background(gl.xres,gl.yres,gl.BackgroundTitleTexture);
 
@@ -834,6 +836,7 @@ void render() {
 			//float angle = atan2(ship.dir[1], ship.dir[0]);
 			glRotatef(g.ship.angle, 0.0f, 0.0f, 1.0f);
 
+			// Custom Artwork for our main ship
 			extern void map_texture(GLuint texid, float w);
 			map_texture(gl.MainShipTexture,25.0f);
 		}
@@ -856,6 +859,7 @@ void render() {
 			}
 			glEnd();*/
 
+			// Custom Artwork for our Enemy ship
 			void map_texture(GLuint texid, float w);
 			map_texture(gl.EnemyTexture,30.0f);
 
@@ -896,8 +900,8 @@ void render() {
 		show_scores(score);
 
 		// Calculate Lives
-		//extern void show_lives(float);
-		//show_lives(lives);
+		extern void show_lives(float);
+		show_lives(lives);
 
 		// Time: 30 sec
 		if (!gl.paused) {
