@@ -24,7 +24,7 @@ void show_time(int st)
     ggprint13(&r, 16, 0xfbfbfa, "TIME: ", "%i", st);
 
     r.bot = gl.yres/2;
-    r.left = (gl.xres/2)+400;
+    r.left = (gl.xres/2)+405;
     r.center = 0;
     
     if (st > 15)
@@ -52,7 +52,7 @@ void show_timesup()
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)-50 ;
     r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "Time is up!!!\n Lets see your score");
+    ggprint13(&r, 16, 0xe92b36, "Time is up!!!");
 }
 
 void show_ui()
