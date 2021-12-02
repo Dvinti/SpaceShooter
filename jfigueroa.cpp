@@ -34,7 +34,7 @@ void show_time(float st)
 	
     // sec
     r.bot = gl.yres/2;
-    r.left = (gl.xres/2)+425;
+    r.left = (gl.xres/2)+435;
     r.center = 0;
     ggprint8b(&r, 16, 0xfbfbfa, "sec ");
 
