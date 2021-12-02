@@ -51,7 +51,7 @@ void move_ship_right() {
 		}
 }
 
-int enemy_boundary_check(Asteroid *a, float lives) {
+int enemy_boundary_check(Asteroid *a) {
 	//keeps enemy from going out of bounds
 	//reaches left edge
 	if (a->pos[0] < 200.0) {
@@ -62,12 +62,13 @@ int enemy_boundary_check(Asteroid *a, float lives) {
 		a->vel[0] = -a->vel[0];
 	}
 	//reaches bottom of screen
-	else if (a->pos[1] < gl.yres - 700.0) {
+	else if (a->pos[1] < gl.yres - 650.0) {
 		a->pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
 		a->pos[1] = (Flt)(gl.yres/1.1589362);
 		a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
 		a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
-		lives -= 1;
+		cout << "Enemy reached the threashold, reducing lives" << endl;	
+		return true;
 	/*   
 	CAUSING SEGMENTATION FAULT 
 		if (g.nasteroids == 1) {
@@ -92,7 +93,7 @@ int enemy_boundary_check(Asteroid *a, float lives) {
 	else if (a->pos[1] > (float)gl.yres - 75.0) {
 		a->vel[1] = -a->vel[1];
 	}
-	return lives;
+	return false;
 }
 
 
@@ -206,3 +207,27 @@ int ship_enemy_collision(Asteroid *a) {
 	return false;
 }
 
+
+int checkpoint = 300;
+int score_new_lives(int score, float lives) {
+	if (score >= checkpoint && lives < 4.0) {
+		if (lives > 3.0){
+			lives = 4.0;
+			cout << "new lives added"<<endl<<endl;
+		}
+		else{
+			lives += 1.0;
+		}
+		checkpoint += 300;
+		cout << "new lives added"<<endl<<endl;
+	}
+	return lives;
+}
+int score_new_lives_type2(int score) {
+	if (score >= checkpoint) {
+		//eligible for new lives
+		checkpoint += 300;
+		return true;
+	}
+	return false;
+}

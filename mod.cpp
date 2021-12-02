@@ -573,6 +573,11 @@ void buildAsteroidFragment(Asteroid *ta, Asteroid *a)
 	//std::cout << "frag" << std::endl;
 }
 
+extern int ship_enemy_collision(Asteroid *a);
+extern int enemy_boundary_check(Asteroid *a);
+extern int score_new_lives(int score, float lives);
+extern int score_new_lives_type2(int score);
+
 void physics() 
 {
     Flt d0,d1,dist;
@@ -635,17 +640,33 @@ void physics()
 	//Update asteroid positions
     if (!gl.paused && !gl.BackgroundTitle && !gl.Highscore) {
         Asteroid *a = g.ahead;
-        extern int ship_enemy_collision(Asteroid *a);
-        extern int enemy_boundary_check(Asteroid *a, float lives);
         while (a) {
+            float new_life = 0;
             a->pos[0] += a->vel[0];
             a->pos[1] += a->vel[1];
-            enemy_boundary_check(a, lives);
+            
             //if collision happened reduce lives
             if (ship_enemy_collision(a) == true) {
+                cout << "collision true lives before: " << lives << endl;
                 lives -= 0.5;
+                cout << "collision true lives after deduction: " << lives << endl;
                 score += 25;
-                cout << "returned true" << endl;
+                if (score_new_lives_type2(score) == true) {
+                    if (lives > 3.0)
+			            lives = 4.0;
+                    else 
+                        lives += 1.0;
+		           cout << "type 2: new lives added"<<endl<<endl;
+                }
+
+               // cout << "type 2 lives after: " << lives << endl;
+            }
+            else {
+                if (enemy_boundary_check(a) == true) {
+                    cout << "returned true lives before: " << lives << endl;
+                    lives -= 1.0;
+                    cout << "returned true lives after: " << lives << endl;
+                }
             }
             a->angle += a->rotate;
             a = a->next;
@@ -687,6 +708,7 @@ void physics()
                             g.nasteroids++;
                         }
                         score += 100;
+                        lives = score_new_lives(score, lives);
                     } 
                     else {
                         a->color[0] = 1.0;
@@ -699,6 +721,7 @@ void physics()
                         a = savea;
                         g.nasteroids--;
                         score += 50;
+                        lives = score_new_lives(score, lives);
                     }
                     //delete the bullet...
                     memcpy(&g.barr[i], &g.barr[g.nbullets-1], sizeof(Bullet));
