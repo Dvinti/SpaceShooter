@@ -22,7 +22,7 @@ using namespace std;
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
 const int MAX_BULLETS = 100;
-const int MAX_ENEMIES = 0;
+const int MAX_ENEMIES = 8;
 #define PI 3.141592653589793
 #define ALPHA 1
 const Flt MINIMUM_ASTEROID_SIZE = 20.0;
@@ -58,6 +58,7 @@ Global::Global()
 	Background2 = 0;
 	BackgroundTitle = 1;
 	Highscore = 0;
+	CreditScreen = 1;
 };
 
 Global gl;
@@ -90,7 +91,7 @@ Game::Game()
 	nbullets = 0;
 	srand (time(NULL));
 	//build Asteroids...
-	for (int j = 0; j < 5; j++) {
+	for (int j = 0; j < MAX_ENEMIES; j++) {
 		Asteroid *a = new Asteroid;
 		a->nverts = 3;  //number of vertices
 		a->radius = 30.0; //size of asteroid
@@ -104,15 +105,15 @@ Game::Game()
 			angle += inc;
 		}
 		a->pos[0] = (Flt)(rand() % (800 - 200 + 1) + 200); //x position
-		a->pos[1] = (Flt)(gl.yres/1.1589362); //y position
+		a->pos[1] = (Flt)(gl.yres - 120); //y position
 		a->pos[2] = 0.0f; //z position
 		a->angle = 0.0;
 		a->rotate = rnd() * 4.0 - 2.0;
 		a->color[0] = 0.0;
 		a->color[1] = 1.0;
 		a->color[2] = 1.0;
-		a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
-		a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
+		a->vel[0] = (Flt)(rnd()*2.2-1.0); //velocity in x direction
+		a->vel[1] = (Flt)(rnd()*2.2-1.0); //velocity in y direction
 		//std::cout << "asteroid" << std::endl;
 		//add to front of linked list
 		a->next = ahead;
@@ -297,7 +298,7 @@ int main()
 	return 0;
 }
 
-Image img[8] = {
+Image img[9] = {
 	"./images/Background_game.png",
 	"./images/Background_game2.png",
 	"./images/SpaceShooter.png",
@@ -305,6 +306,7 @@ Image img[8] = {
 	"./images/EnemyShip.png",
 	"./images/Highscore.png",
 	"./images/bullet.png",
+	"./images/CreditScreen.png",
 	"./images/explosion.png"};
 
 void init_opengl(void)
@@ -332,6 +334,7 @@ void init_opengl(void)
 	glGenTextures(1, &gl.Background1Texture);
 	glGenTextures(1, &gl.BackgroundTitleTexture);
 	glGenTextures(1, &gl.HighscoreTexture);
+	glGenTextures(1, &gl.CreditScreenTexture);
 	glGenTextures(1, &gl.MainShipTexture);
 	glGenTextures(1, &gl.EnemyTexture);
 	glGenTextures(1, &gl.LaserTexture);
@@ -433,6 +436,19 @@ void init_opengl(void)
 			GL_RGBA, GL_UNSIGNED_BYTE, Highscore);
 
 	free(Highscore);
+
+	build_imageTexture(gl.CreditScreenTexture);
+
+	/*
+	 *
+	 * Must free data
+	 *
+	 */
+	unsigned char *CreditScreen = buildAlphaData(&img[7]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[7].width, img[7].height, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, CreditScreen);
+
+	free(CreditScreen);
 }
 
 void normalize2d(Vec v)
@@ -525,12 +541,12 @@ int check_keys(XEvent *e)
 			break;
 		case XK_r:
 			if (gl.Highscore || gl.Background1) {
-                if (gl.Highscore) {
-                    gl.Highscore = 0;
-                }
-                gl.startUpDisplay = 1;
-                lives = 6.0;
-                st = 60.0;
+				if (gl.Highscore) {
+					gl.Highscore = 0;
+				}
+				gl.startUpDisplay = 1;
+				lives = 6.0;
+				st = 60.0;
 			}
 			break;
 	}
@@ -618,8 +634,8 @@ void buildAsteroidFragment(Asteroid *ta, Asteroid *a)
 	ta->color[0] = 0.8;
 	ta->color[1] = 0.8;
 	ta->color[2] = 0.7;
-	ta->vel[0] = a->vel[0] + (rnd()*2.0-1.0);
-	ta->vel[1] = abs(a->vel[1] + (rnd()*2.0-1.0));
+	ta->vel[0] = a->vel[0] + (rnd()*2.8 -0.7);
+	ta->vel[1] = abs(a->vel[1] + (rnd()*2.8 - 0.7));
 	//std::cout << "frag" << std::endl;
 }
 
@@ -916,14 +932,11 @@ void render() {
 		// Credit Screen
 		if (gl.show_credits) {
 			// Clears the Screen
-			glClear(GL_COLOR_BUFFER_BIT);
+			glColor3f(1.0, 1.0, 1.0);
+			show_background(gl.xres,gl.yres,gl.CreditScreenTexture);
 
 			// Shows the student's credit
-			r.bot = gl.yres - 80;
-			r.left = (gl.xres/2) - 20;
-			r.center = 0;
-			ggprint16(&r, 16, 0x00a1ee, "Credits");
-			show_Daniels_credits(gl.xres/2, gl.yres/2);
+			show_Daniels_credits(gl.xres - 825, gl.yres - 685);
 			show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
 			show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
 			show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
@@ -937,7 +950,7 @@ void render() {
 		}
 	}
 
-	if (lives <= 3 || st < 30) {
+	if (lives <= 3 || st < 0.1) {
 		gl.Highscore = 1;
 		glColor3f(1.0, 1.0, 1.0);
 		show_background(gl.xres,gl.yres,gl.HighscoreTexture);
