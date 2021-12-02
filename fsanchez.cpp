@@ -155,3 +155,20 @@ void show_background(int x, int y, GLuint texid) {
     glEnd();
 
 }
+
+void map_texture(GLuint texid, float w) {
+
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.0f);
+    glBindTexture(GL_TEXTURE_2D, texid);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(-w,  w);
+    glTexCoord2f(1.0f, 0.0f); glVertex2f( w,  w);
+    glTexCoord2f(1.0f, 1.0f); glVertex2f( w, -w);
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(-w, -w);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glDisable(GL_ALPHA_TEST);
+    glPopMatrix();
+    glEnd();
+}
