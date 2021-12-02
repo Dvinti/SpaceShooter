@@ -150,28 +150,6 @@ int ship_enemy_collision(Asteroid *a) {
 	Ey1 = a->pos[1] - 35; //top
 	Ey2 = a->pos[1] + 35; //bottom
 
-//	x = g.ship.pos[0] - a->pos[0];
-//	y = g.ship.pos[1] - a->pos[1];
-//	dist = (x*x + y*y);
-
-
-	//check if the hitboxes intersect
-	/*if (x1 < Ex2 &&
-			x2 > Ex1 &&
-			y1 < Ey2 &&
-			y2 > Ey1) {
-			cout << "Collision!" << endl;
-			//if they do, then the enemy is dies
-			a->color[0] = 1.0;
-			a->color[1] = 0.1;
-			a->color[2] = 0.1;
-			//delete the asteroid
-			Asteroid *savea = a->next;
-			deleteAsteroid(&g, a);
-			a = savea;
-			g.nasteroids--;
-		return true;
-	}*/
 
 	//check for collision
 		if (x1 < Ex2 &&
@@ -179,11 +157,10 @@ int ship_enemy_collision(Asteroid *a) {
 				y1 < Ey2 &&
 				y2 > Ey1) {
 
-//	if (dist < (30*30)) {
 			cout << "Collision!" << endl;
 			//if they do, then spawn baby enemies
 
-			//credit to Gordon Grissel from his Asteroid framework
+			//credit to Gordon Griesel from his Asteroid framework
 			if (a->radius >= 30) {
 				//break it into pieces.
 				Asteroid *ta = a;
