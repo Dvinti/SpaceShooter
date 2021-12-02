@@ -15,8 +15,6 @@
 using namespace std;
 
 extern Global gl;
-extern Game g;
-extern Bullet b;
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------Framework for Buttons---------------------------*/
@@ -296,36 +294,16 @@ void pause_game()
     }
 }
 
-/* Modified for easier use
-void init(int nbuttons)
+void print_pause()
 {
-    for (int i = 1; i < nbuttons; i++) {
-        button[i].r.width = gl.xres/gl.xres + 199;
-        button[0].r.height = gl.yres/gl.yres + 50;
-        button[1].r.height = gl.yres/gl.yres + 80;
-        button[i].r.left = gl.xres - 210;
-        button[0].r.bot = gl.yres - 60;
-        button[1].r.bot = gl.yres/700 + 10;
-        button[i].r.right =
-            button[i].r.left + button[i].r.width;
-        button[i].r.top = button[i].r.bot + button[i].r.height;
-        button[i].r.centerx =
-            (button[i].r.left + button[i].r.right) / 2;
-        button[i].r.centery =
-            (button[i].r.bot + button[i].r.top) / 2;
-        strcpy(button[0].text, "Quit");
-        strcpy(button[1].text, "Play");
-        button[i].down = 0;
-        button[i].click = 0;
-        button[i].color[0] = 0.4f;
-        button[i].color[1] = 0.4f;
-        button[i].color[2] = 0.7f;
-        button[i].dcolor[0] = button[i].color[0] * 0.5f;
-        button[i].dcolor[1] = button[i].color[1] * 0.5f;
-        button[i].dcolor[2] = button[i].color[2] * 0.5f;
-        button[i].text_color = 0x00ffffff;
+    if (gl.paused) {
+        Rect r;
+        r.bot = gl.yres/2;
+        r.left = gl.xres/2 - 50;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "Paused");
     }
-}*/
+}
 
 /*
 void highscore(int score, string scorename)

@@ -745,6 +745,9 @@ void render() {
             glColor3f(1.0, 1.0, 1.0);
             show_background(gl.xres,gl.yres,gl.Background1Texture);
         }
+
+        extern void print_pause();
+        print_pause();
     
         // Show UI
         extern void show_ui();
