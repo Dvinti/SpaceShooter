@@ -26,74 +26,76 @@ void credit_toggle() {
 }
 
 void move_ship_left() {
-	g.ship.pos[0] += -8.0;
-	cout << "<--" << g.ship.pos[0] << endl;
-	if (g.ship.pos[0] < 185) {
-		cout << "|<-- out of bounds" << endl;
-		g.ship.pos[0] = 190;
-	}
-	else if (g.ship.pos[0] > 815) {
-		cout << "out of bounds -->|" << endl;
-		g.ship.pos[0] = 810;
-	}
+        g.ship.pos[0] += -8.0;
+        cout << "<--" << g.ship.pos[0] << endl;
+        if (g.ship.pos[0] < 220) {
+                cout << "|<-- out of bounds" << endl;
+                g.ship.pos[0] = 230;
+        }
+        else if (g.ship.pos[0] > 780) {
+                cout << "out of bounds -->|" << endl;
+                g.ship.pos[0] = 770;
+        }
 }
 
 void move_ship_right() {
-	g.ship.pos[0] += 8.0;
-		cout << "-->" << g.ship.pos[0] << endl;
-		if (g.ship.pos[0] < 185) {
-			cout << "|<-- out of bounds" << endl;
-			g.ship.pos[0] = 190;
-		}
-		else if (g.ship.pos[0] > 815) {
-			cout << "out of bounds -->|" << endl;
-			g.ship.pos[0] = 810;
-		}
+        g.ship.pos[0] += 8.0;
+        cout << "-->" << g.ship.pos[0] << endl;
+        if (g.ship.pos[0] < 220) {
+                cout << "|<-- out of bounds" << endl;
+                g.ship.pos[0] = 230;
+        }
+        else if (g.ship.pos[0] > 780) {
+                cout << "out of bounds -->|" << endl;
+                g.ship.pos[0] = 770;
+        }
 }
 
 int enemy_boundary_check(Asteroid *a) {
-	//keeps enemy from going out of bounds
-	//reaches left edge
-	if (a->pos[0] < 200.0) {
-		a->vel[0] = -a->vel[0];
-	}
-	//reaches right edge
-	else if (a->pos[0] > 800.0) {
-		a->vel[0] = -a->vel[0];
-	}
-	//reaches bottom of screen
-	else if (a->pos[1] < gl.yres - 650.0) {
-		a->pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
-		a->pos[1] = (Flt)(gl.yres/1.1589362);
-		a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
-		a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
-		cout << "Enemy reached the threashold, reducing lives" << endl;	
-		return true;
-	/*   
-	CAUSING SEGMENTATION FAULT 
-		if (g.nasteroids == 1) {
-			cout << "Game Over!" << endl;
-			break;
-		}
-		else if (g.nasteroids == 2) {
-			cout << "Last one: " << g.nasteroids << endl;
-			deleteAsteroid(&g, a);
-			g.nasteroids--;
-		}
-		else {
-			cout << "Asteroid: " << g.nasteroids << endl;
-			Asteroid *savea = a->next;
-			deleteAsteroid(&g, a);
-			a = savea;
-			g.nasteroids--;
-		}
-	*/
-	}
-	//reaches top of screen
-	else if (a->pos[1] > (float)gl.yres - 75.0) {
-		a->vel[1] = -a->vel[1];
-	}
-	return false;
+        //keeps enemy from going out of bounds
+        //reaches left edge
+        if (a->pos[0] < 220.0) {
+                a->vel[0] = -a->vel[0];
+        }
+        //reaches right edge
+        else if (a->pos[0] > 780.0) {
+                a->vel[0] = -a->vel[0];
+        }
+        //reaches bottom of screen
+        else if (a->pos[1] < gl.yres-525) {
+
+                a->vel[1] = -a->vel[1];
+        //      a->pos[0] = (Flt)(rand() % (815 - 185 + 1) + 185);
+        //      a->pos[1] = (Flt)(gl.yres/1.1589362);
+        //      a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
+        //      a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
+                cout << "Enemy reached the threashold, reducing lives" << endl;
+                return true;
+                /*
+                     CAUSING SEGMENTATION FAULT
+                     if (g.nasteroids == 1) {
+                     cout << "Game Over!" << endl;
+                     break;
+                     }
+                     else if (g.nasteroids == 2) {
+                     cout << "Last one: " << g.nasteroids << endl;
+                     deleteAsteroid(&g, a);
+                     g.nasteroids--;
+                     }
+                     else {
+                     cout << "Asteroid: " << g.nasteroids << endl;
+                     Asteroid *savea = a->next;
+                     deleteAsteroid(&g, a);
+                     a = savea;
+                     g.nasteroids--;
+                     }
+                     */
+        }
+        //reaches top of screen
+        else if (a->pos[1] > (float)gl.yres - 95) {
+                a->vel[1] = -a->vel[1];
+        }
+        return false;
 }
 
 
