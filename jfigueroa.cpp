@@ -107,7 +107,7 @@ void show_ui()
     r.bot = gl.yres - 675;
     r.left = 20;
     r.center = 0;
-    ggprint8b(&r, 16, 0x00a1ee, "NUMBER OF LIVES: ");
+    ggprint13(&r, 16, 0x00a1ee, "NUMBER OF LIVES: ");
 }
 
 void show_instructions()
@@ -157,5 +157,5 @@ void show_jose_credits(int x, int y)
     r.bot = y;
     r.left = x;
     r.center = 1;
-    ggprint8b(&r, 16, 0x00ff0000, "Jose Figueroa");
+    ggprint40(&r, 16, 0x00ff0000, "Jose Figueroa");
 }

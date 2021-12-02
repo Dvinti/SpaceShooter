@@ -67,55 +67,6 @@ void init(void)
         button[i].dcolor[2] = button[i].color[2] * 0.5f;
         button[i].text_color = 0x00ffffff;
     }
-    /*
-    if (gl.BackgroundTitle) {
-        button[1].r.width = gl.xres/gl.xres + 199;
-        button[1].r.height = gl.yres/gl.yres + 80;
-        button[1].r.left = gl.xres - 210;
-        button[1].r.bot = gl.yres/700 + 10;
-        button[1].r.right =
-            button[1].r.left + button[1].r.width;
-        button[1].r.top = button[1].r.bot + button[1].r.height;
-        button[1].r.centerx =
-            (button[1].r.left + button[1].r.right) / 2;
-        button[1].r.centery =
-            (button[1].r.bot + button[1].r.top) / 2;
-        strcpy(button[1].text, "Play");
-        button[1].down = 0;
-        button[1].click = 0;
-        button[1].color[0] = 0.4f;
-        button[1].color[1] = 0.4f;
-        button[1].color[2] = 0.7f;
-        button[1].dcolor[0] = button[1].color[0] * 0.5f;
-        button[1].dcolor[1] = button[1].color[1] * 0.5f;
-        button[1].dcolor[2] = button[1].color[2] * 0.5f;
-        button[1].text_color = 0x00ffffff;
-    }
-
-    if (gl.Highscore) {
-        button[2].r.width = gl.xres/gl.xres + 199;
-        button[2].r.height = gl.yres/gl.yres + 80;
-        button[2].r.left = gl.xres - 210;
-        button[2].r.bot = gl.yres/700 + 10;
-        button[2].r.right =
-            button[2].r.left + button[2].r.width;
-        button[2].r.top = button[2].r.bot + button[2].r.height;
-        button[2].r.centerx =
-            (button[2].r.left + button[2].r.right) / 2;
-        button[2].r.centery =
-            (button[2].r.bot + button[2].r.top) / 2;
-        strcpy(button[2].text, "Credits");
-        button[2].down = 0;
-        button[2].click = 0;
-        button[2].color[0] = 0.4f;
-        button[2].color[1] = 0.4f;
-        button[2].color[2] = 0.7f;
-        button[2].dcolor[0] = button[2].color[0] * 0.5f;
-        button[2].dcolor[1] = button[2].color[1] * 0.5f;
-        button[2].dcolor[2] = button[2].color[2] * 0.5f;
-        button[2].text_color = 0x00ffffff;
-    }
-    */
 }
 void init_hs(void)
 {
@@ -269,7 +220,7 @@ void PlayButton()
     }
 }
 
-void Quit_Button()
+/*void Quit_Button()
 {
     Rect r;
     if (button[3].over) {
@@ -306,7 +257,7 @@ void Quit_Button()
     } else {
         ggprint16(&r, 0, button[3].text_color, button[3].text);
     }
-}
+}*/
 
 void show_Daniels_credits(int x, int y)
 {
@@ -339,13 +290,13 @@ void show_lives(float lives)
 {
     Rect r;
     r.bot = gl.yres - 675;
-    r.left = 125;
+    r.left = 175;
     r.center = 0;
     
     if (lives > 1.5) {
-	    ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
+	    ggprint13(&r, 16, 0xfbfbfa, "%0.2f", lives);
     } else { 
-	    ggprint8b(&r, 16, 0xe92b36, "%0.2f", lives);
+	    ggprint13(&r, 16, 0xe92b36, "%0.2f", lives);
     }
 }
 

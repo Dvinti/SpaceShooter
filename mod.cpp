@@ -937,13 +937,13 @@ void render() {
 
 			// Shows the student's credit
 			show_Daniels_credits(gl.xres - 825, gl.yres - 685);
-			show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
-			show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
-			show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
-			show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
+			show_frankie_credits(gl.xres - 500, gl.yres - 580);
+			show_enrique_credits(gl.xres - 825, gl.yres - 385);
+			show_jennipher_credits(gl.xres - 180, gl.yres - 685);
+			show_jose_credits(gl.xres - 180, gl.yres - 380);
 
 			// Instructions
-			r.bot = gl.yres - 20;
+			r.bot = gl.yres - 30;
 			r.left = 10;
 			r.center = 0;
 			ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
