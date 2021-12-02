@@ -335,7 +335,7 @@ void high_score(int score, int highscore)
     r.bot = gl.yres - 285;
     r.left = 280;
     r.center = 0;
-    ggprint40(&r, 16, 0xfbfbfa, "1.  Player 1");
+    ggprint40(&r, 16, 0xe92b36, "1.  Player 1");
 
     r.bot = gl.yres - 380;
     r.left = 280;
@@ -365,17 +365,17 @@ void high_score(int score, int highscore)
     r.bot = gl.yres - 380;
     r.left = 600;
     r.center = 0;
-    ggprint40(&r, 16, 0xfbfbfa, "00500"); // Player 2
+    ggprint40(&r, 16, 0xfbfbfa, "00200"); // Player 2
 
     r.bot = gl.yres - 462;
     r.left = 600;
     r.center = 0;
-    ggprint40(&r, 16, 0xfbfbfa, "00350"); // Player 3
+    ggprint40(&r, 16, 0xfbfbfa, "00150"); // Player 3
 
     r.bot = gl.yres - 545;
     r.left = 600;
     r.center = 0;
-    ggprint40(&r, 16, 0xfbfbfa, "00250"); // Player 4
+    ggprint40(&r, 16, 0xfbfbfa, "00100"); // Player 4
 }
 
 /*

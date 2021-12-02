@@ -555,6 +555,12 @@ int check_keys(XEvent *e)
 				st = 60.0;
 			}
 			break;
+		case XK_o:
+			// End Game Quickly
+			if (gl.Background1) {
+				lives = 0.0;
+				st = 5.0;
+			}
 	}
 	return 0;
 }
@@ -890,15 +896,17 @@ void render() {
 		show_scores(score);
 
 		// Calculate Lives
-		extern void show_lives(float);
-		show_lives(lives);
+		//extern void show_lives(float);
+		//show_lives(lives);
 
 		// Time: 30 sec
 		if (!gl.paused) {
 			if (st > 0) {
 			extern void show_time(float);
 			show_time(st);
+			usleep(5000);
 			st -= 0.01;
+
 		} 
 		}
 		// Credit Screen
