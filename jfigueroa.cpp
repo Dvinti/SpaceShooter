@@ -21,7 +21,7 @@ void show_time(int st)
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+355;
     r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "TIME: ", "%i", st);
+    ggprint13(&r, 16, 0xfbfbfa, "TIME: ");
 
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+405;
