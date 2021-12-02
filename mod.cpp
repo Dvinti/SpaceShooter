@@ -539,6 +539,12 @@ int check_keys(XEvent *e)
 		case XK_p:
 			pause_game();
 			break;
+		case XK_g:
+			if (gl.Background1) {
+				lives = 9999.0;
+				st = 9999.0;
+			}
+			break;
 		case XK_r:
 			if (gl.Highscore || gl.Background1) {
 				if (gl.Highscore) {
