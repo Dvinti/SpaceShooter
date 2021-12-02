@@ -39,6 +39,10 @@ class Global {
         GLuint Background2Texture;
         GLuint BackgroundTitleTexture;
         GLuint HighscoreTexture;
+        GLuint EnemyTexture;
+        GLuint MainShipTexture;
+        GLuint LaserTexture;
+
     public:
         // Constructer
         Global();
@@ -62,24 +66,24 @@ class Bullet {
         Vec vel;
         float color[3];
         struct timespec time;
-    public:
+ public:
         Bullet();
 };
 
 class Asteroid {
 public:
-	Vec pos;
-	Vec vel;
-	int nverts;
-	Flt radius;
-	Vec vert[8];
-	float angle;
-	float rotate;
-	float color[3];
-	struct Asteroid *prev;
-	struct Asteroid *next;
+        Vec pos;
+        Vec vel;
+        int nverts;
+        Flt radius;
+        Vec vert[8];
+        float angle;
+        float rotate;
+        float color[3];
+        struct Asteroid *prev;
+        struct Asteroid *next;
 public:
-	Asteroid();
+        Asteroid();
 };
 
 class Game {
