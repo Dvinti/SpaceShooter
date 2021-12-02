@@ -26,8 +26,12 @@ void show_time(int st)
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+400;
     r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "%i", st);
-
+    
+    if (st > 15)
+	ggprint13(&r, 16, 0xfbfbfa, "%i", st);
+    else
+	ggprint13(&r, 16, 0xe92b36, "%i", st);
+	
     // sec
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+425;
