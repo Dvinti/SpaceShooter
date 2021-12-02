@@ -27,26 +27,26 @@ void credit_toggle() {
 
 void move_ship_left() {
         g.ship.pos[0] += -8.0;
-        cout << "<--" << g.ship.pos[0] << endl;
+        //cout << "<--" << g.ship.pos[0] << endl;
         if (g.ship.pos[0] < 220) {
-                cout << "|<-- out of bounds" << endl;
+                //cout << "|<-- out of bounds" << endl;
                 g.ship.pos[0] = 230;
         }
         else if (g.ship.pos[0] > 780) {
-                cout << "out of bounds -->|" << endl;
+                //cout << "out of bounds -->|" << endl;
                 g.ship.pos[0] = 770;
         }
 }
 
 void move_ship_right() {
         g.ship.pos[0] += 8.0;
-        cout << "-->" << g.ship.pos[0] << endl;
+        //cout << "-->" << g.ship.pos[0] << endl;
         if (g.ship.pos[0] < 220) {
-                cout << "|<-- out of bounds" << endl;
+                //cout << "|<-- out of bounds" << endl;
                 g.ship.pos[0] = 230;
         }
         else if (g.ship.pos[0] > 780) {
-                cout << "out of bounds -->|" << endl;
+                //cout << "out of bounds -->|" << endl;
                 g.ship.pos[0] = 770;
         }
 }
@@ -68,7 +68,7 @@ int enemy_boundary_check(Asteroid *a) {
 	//      a->pos[1] = (Flt)(gl.yres/1.1589362);
 	//      a->vel[0] = (Flt)(rnd()*2.0-1.0); //velocity in x direction
 	//      a->vel[1] = (Flt)(rnd()*2.0-1.0); //velocity in y direction
-			cout << "Enemy reached the threshold, reducing lives" << endl;
+			//cout << "Enemy reached the threshold, reducing lives" << endl;
 			return true;
                 /*
                      CAUSING SEGMENTATION FAULT
@@ -101,7 +101,7 @@ int enemy_boundary_check(Asteroid *a) {
 //checks if bullet has reached the top bound of the screen
 void bullet_bounds_check(Bullet *b, int i) {
 	if (b->pos[1] > (float)gl.yres - 75.0) {
-		cout << "Bullet out of bounds TOP" << endl;
+		//cout << "Bullet out of bounds TOP" << endl;
 		//time to delete the bullet.
 		memcpy(&g.barr[i], &g.barr[g.nbullets-1],
 				sizeof(Bullet));
@@ -228,7 +228,7 @@ int score_new_lives(int score, float lives) {
 			lives += 1.0;
 		}
 		checkpoint += 300;
-		cout << "new lives added"<<endl<<endl;
+		//cout << "new lives added"<<endl<<endl;
 	}
 	return lives;
 }

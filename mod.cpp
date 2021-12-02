@@ -562,7 +562,7 @@ int check_keys(XEvent *e)
 void shoot_bullets()
 {
 	//move shoot
-	cout << "space bar" << endl;
+	//cout << "space bar" << endl;
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	double ts = timeDiff(&g.bulletTimer, &bt);
