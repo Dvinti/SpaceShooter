@@ -867,14 +867,16 @@ void render() {
         show_lives(lives);
 
 	    // Time: 30 sec
-        if (st > 0) {
+        if (!gl.paused) {
+	 if (st > 0) {
             extern void show_time(float);
             show_time(st);
             st -= 0.01;
         } else {
             extern void show_timesup();
             show_timesup();
-        }
+        	}
+	} 
 
         // Credit Screen
         if (gl.show_credits) {
