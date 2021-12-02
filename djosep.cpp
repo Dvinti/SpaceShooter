@@ -18,6 +18,7 @@ extern Global gl;
 
 /*---------------------------------------------------------------------------*/
 /*---------------------------Framework for Buttons---------------------------*/
+/*---------------------Code Provided by Gordon Griesel-----------------------*/
 /*---------------------------------------------------------------------------*/
 int lbutton = 0;
 int rbutton = 0;
@@ -204,6 +205,7 @@ void check_mouse(XEvent *e)
 }
 /*---------------------------------------------------------------------------*/
 /*---------------------------Framework for Buttons---------------------------*/
+/*---------------------Code Provided by Gordon Griesel-----------------------*/
 /*---------------------------------------------------------------------------*/
 
 void PlayButton()
@@ -280,10 +282,11 @@ void show_lives(float lives)
     r.left = 125;
     r.center = 0;
     
-    if (lives > 1.5)
-	ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
-    else 
-	ggprint8b(&r, 16, 0xe92b36, "%0.2f", lives);
+    if (lives > 1.5) {
+	    ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
+    } else { 
+	    ggprint8b(&r, 16, 0xe92b36, "%0.2f", lives);
+    }
 }
 
 // pause game on start up, resume when user clicks play

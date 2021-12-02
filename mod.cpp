@@ -297,13 +297,15 @@ int main()
     return 0;
 }
 
-Image img[6] = {
+Image img[8] = {
 "./images/Background_game.png",
 "./images/Background_game2.png",
 "./images/SpaceShooter.png",
 "./images/MainShip.png",
 "./images/EnemyShip.png",
-"./images/Highscore.png" };
+"./images/Highscore.png",
+"./images/bullet.png",
+"./images/explosion.png"};
 
 void init_opengl(void) 
 {
@@ -746,8 +748,8 @@ void render() {
             show_background(gl.xres,gl.yres,gl.Background1Texture);
         }
 
-        extern void print_pause();
-        print_pause();
+        //extern void print_pause();
+        //print_pause();
     
         // Show UI
         extern void show_ui();
