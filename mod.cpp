@@ -113,7 +113,7 @@ Game::Game()
 		a->color[1] = 1.0;
 		a->color[2] = 1.0;
 		a->vel[0] = (Flt)(rnd()*2.2-1.0); //velocity in x direction
-		a->vel[1] = (Flt)(rnd()*2.2-1.0); //velocity in y direction
+		a->vel[1] = -1.0 * abs((Flt)(rnd()*2.2-1.0)); //velocity in y direction
 		//std::cout << "asteroid" << std::endl;
 		//add to front of linked list
 		a->next = ahead;
@@ -678,29 +678,6 @@ void physics()
 			//move the bullet
 			b->pos[0] += b->vel[0];
 			b->pos[1] += b->vel[1];
-
-			//cout << "bullet POS " << b->pos[0] << " " << b->pos[1] << endl;
-			//Check for collision with window edges
-
-			//********************************WE CAN DELETE THIS***********************************************************
-			if (b->pos[0] < 0.0) {
-				cout << "IF STATEMENT USED" << endl;
-				b->pos[0] += (float)gl.xres;
-			}
-			else if (b->pos[0] > (float)gl.xres) {
-				cout << "IF STATEMENT USED" << endl;
-				b->pos[0] -= (float)gl.xres;
-			}
-			else if (b->pos[1] < 0.0) {
-				cout << "IF STATEMENT USED" << endl;
-				//b->pos[1] += (float)gl.yres;
-			}
-			else if (b->pos[1] > (float)gl.yres) {
-				cout << "IF STATEMENT USED" << endl;
-				//b->pos[1] -= (float)gl.yres;
-				//break; //We can kill the bullets this way but its laggy
-			}
-			//***********************************************************************************************************
 			++i;
 		}
 		//
@@ -712,32 +689,24 @@ void physics()
 
 			//if collision happened reduce lives
 			if (ship_enemy_collision(a) == true) {
-				cout << "collision true lives before: " << lives << endl;
 				lives -= 0.5;
-				cout << "collision true lives after deduction: " << lives << endl;
 				score += 25;
 				if (score_new_lives_type2(score) == true) {
 					if (lives > 6.0)
 						lives = 7.0;
 					else
 						lives += 1.0;
-					cout << "type 2: new lives added"<<endl<<endl;
 				}
-
-				// cout << "type 2 lives after: " << lives << endl;
 			}
 			else {
 				if (enemy_boundary_check(a) == true) {
-					cout << "returned true lives before: " << lives << endl;
 					lives -= 1.0;
-					cout << "returned true lives after: " << lives << endl;
 				}
 			}
 			//a->angle += a->rotate;
 			a = a->next;
 		}
 
-		//cout << "lives: " << lives << endl;
 		//
 		//Asteroid collision with bullets?
 		//If collision detected:
@@ -937,13 +906,13 @@ void render() {
 
 			// Shows the student's credit
 			show_Daniels_credits(gl.xres - 825, gl.yres - 685);
-			show_frankie_credits(gl.xres - 500, gl.yres - 580);
-			show_enrique_credits(gl.xres - 825, gl.yres - 385);
-			show_jennipher_credits(gl.xres - 180, gl.yres - 685);
-			show_jose_credits(gl.xres - 180, gl.yres - 380);
+			show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
+			show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
+			show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
+			show_jose_credits(gl.xres/2, (gl.yres - 80) /2);
 
 			// Instructions
-			r.bot = gl.yres - 30;
+			r.bot = gl.yres - 20;
 			r.left = 10;
 			r.center = 0;
 			ggprint8b(&r, 16, 0x00a1ee, "Press c to return to the main screen");
