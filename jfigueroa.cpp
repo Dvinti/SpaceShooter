@@ -45,16 +45,6 @@ void show_time(float st)
     ggprint13(&r, 16, 0xf3d172, "* * * * * * * * * * * *");
 }
 
-void show_timesup()
-{
-
-    Rect r;
-    r.bot = gl.yres/2;
-    r.left = (gl.xres/2)-50 ;
-    r.center = 0;
-    ggprint13(&r, 16, 0xe92b36, "Time is up!!!");
-}
-
 void show_ui()
 {
 	Rect r;
