@@ -133,20 +133,26 @@ extern void deleteAsteroid(Game *g, Asteroid *node);
 extern void buildAsteroidFragment(Asteroid *ta, Asteroid *a);
 
 int ship_enemy_collision(Asteroid *a) {
-	int x1, x2, y1, y2;		//ship hitbox
-	int Ex1, Ex2, Ey1, Ey2; //enemy hitbox
+	int x, y, dist;
+	//int x1, x2, y1, y2;		//ship hitbox
+	//int Ex1, Ex2, Ey1, Ey2; //enemy hitbox
 
 	//create a hitbox for the ship
-	x1 = g.ship.pos[0] - (g.ship.pos[0]/15);
-	x2 = g.ship.pos[0] + (g.ship.pos[0]/15);
-	y1 = g.ship.pos[1] - (g.ship.pos[1]/15);
-	y2 = g.ship.pos[1] + (g.ship.pos[1]/15);
+//	x1 = g.ship.pos[0] - (30);
+//	x2 = g.ship.pos[0] + (30);
+//	y1 = g.ship.pos[1] - (30);
+//	y2 = g.ship.pos[1] + (30);
+//
+//	//create a hitbox for the enemy
+//	Ex1 = a->pos[0] - (30);
+//	Ex2 = a->pos[0] + (30);
+//	Ey1 = a->pos[1] - (30);
+//	Ey2 = a->pos[1] + (30);
 
-	//create a hitbox for the enemy
-	Ex1 = a->pos[0] - a->radius;
-	Ex2 = a->pos[0] + a->radius;
-	Ey1 = a->pos[1] - a->radius;
-	Ey2 = a->pos[1] + a->radius;
+	x = g.ship.pos[0] - a->pos[0];
+	y = g.ship.pos[1] - a->pos[1];
+	dist = (x*x + y*y);
+
 
 	//check if the hitboxes intersect
 	/*if (x1 < Ex2 &&
@@ -166,10 +172,13 @@ int ship_enemy_collision(Asteroid *a) {
 		return true;
 	}*/
 
-	if (x1 < Ex2 &&
-			x2 > Ex1 &&
-			y1 < Ey2 &&
-			y2 > Ey1) {
+
+//	if (x1 < Ex2 &&
+//			x2 > Ex1 &&
+//			y1 < Ey2 &&
+//			y2 > Ey1) {
+
+	if (dist < (30*30)) {
 			cout << "Collision!" << endl;
 			//if they do, then spawn baby enemies
 

@@ -681,7 +681,6 @@ void physics()
 		//Update asteroid positions
 		Asteroid *a = g.ahead;
 		while (a) {
-			float new_life = 0;
 			a->pos[0] += a->vel[0];
 			a->pos[1] += a->vel[1];
 
