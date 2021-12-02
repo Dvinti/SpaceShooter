@@ -15,20 +15,20 @@ void show_time(float st)
     r.bot = (gl.yres/2)+20;
     r.left = (gl.xres/2)+340;
     r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "* * * * * * * * * * * *");
+    ggprint13(&r, 16, 0xf3d172, "* * * * * * * * * * * *");
 
     // Time 30 sec
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+355;
     r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "TIME: ");
+    ggprint13(&r, 16, 0xf3d172, "TIME: ");
 
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+405;
     r.center = 0;
     
     if (st > 15)
-	ggprint13(&r, 16, 0xfbfbfa, "%0.2f", st);
+	ggprint13(&r, 16, 0xf3d172, "%0.2f", st);
     else
 	ggprint13(&r, 16, 0xe92b36, "%0.2f", st);
 	
@@ -36,13 +36,13 @@ void show_time(float st)
     r.bot = gl.yres/2;
     r.left = (gl.xres/2)+450;
     r.center = 0;
-    ggprint8b(&r, 16, 0xfbfbfa, "sec ");
+    ggprint8b(&r, 16, 0xf3d172, "sec ");
 
     // *****
     r.bot = (gl.yres/2)-25;
     r.left = (gl.xres/2)+340;
     r.center = 0;
-    ggprint13(&r, 16, 0xfbfbfa, "* * * * * * * * * * * *");
+    ggprint13(&r, 16, 0xf3d172, "* * * * * * * * * * * *");
 }
 
 void show_timesup()
