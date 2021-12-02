@@ -58,6 +58,7 @@ Global::Global()
 	Background2 = 0;
 	BackgroundTitle = 1;
 	Highscore = 0;
+	CreditScreen = 1;
 };
 
 Global gl;
@@ -297,7 +298,7 @@ int main()
 	return 0;
 }
 
-Image img[8] = {
+Image img[9] = {
 	"./images/Background_game.png",
 	"./images/Background_game2.png",
 	"./images/SpaceShooter.png",
@@ -305,6 +306,7 @@ Image img[8] = {
 	"./images/EnemyShip.png",
 	"./images/Highscore.png",
 	"./images/bullet.png",
+	"./images/CreditScreen.png",
 	"./images/explosion.png"};
 
 void init_opengl(void)
@@ -332,6 +334,7 @@ void init_opengl(void)
 	glGenTextures(1, &gl.Background1Texture);
 	glGenTextures(1, &gl.BackgroundTitleTexture);
 	glGenTextures(1, &gl.HighscoreTexture);
+	glGenTextures(1, &gl.CreditScreenTexture);
 	glGenTextures(1, &gl.MainShipTexture);
 	glGenTextures(1, &gl.EnemyTexture);
 	glGenTextures(1, &gl.LaserTexture);
@@ -433,6 +436,19 @@ void init_opengl(void)
 			GL_RGBA, GL_UNSIGNED_BYTE, Highscore);
 
 	free(Highscore);
+
+	build_imageTexture(gl.CreditScreenTexture);
+
+	/*
+	 *
+	 * Must free data
+	 *
+	 */
+	unsigned char *CreditScreen = buildAlphaData(&img[7]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img[7].width, img[7].height, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, CreditScreen);
+
+	free(CreditScreen);
 }
 
 void normalize2d(Vec v)
@@ -524,11 +540,13 @@ int check_keys(XEvent *e)
 			pause_game();
 			break;
 		case XK_r:
-			if (gl.Highscore) {
-				gl.Highscore = 0;
+			if (gl.Highscore || gl.Background1) {
+				if (gl.Highscore) {
+					gl.Highscore = 0;
+				}
 				gl.startUpDisplay = 1;
 				lives = 6.0;
-				st = 30.0;
+				st = 60.0;
 			}
 			break;
 	}
@@ -914,14 +932,11 @@ void render() {
 		// Credit Screen
 		if (gl.show_credits) {
 			// Clears the Screen
-			glClear(GL_COLOR_BUFFER_BIT);
+			glColor3f(1.0, 1.0, 1.0);
+			show_background(gl.xres,gl.yres,gl.CreditScreenTexture);
 
 			// Shows the student's credit
-			r.bot = gl.yres - 80;
-			r.left = (gl.xres/2) - 20;
-			r.center = 0;
-			ggprint16(&r, 16, 0x00a1ee, "Credits");
-			show_Daniels_credits(gl.xres/2, gl.yres/2);
+			show_Daniels_credits(gl.xres - 825, gl.yres - 685);
 			show_frankie_credits(gl.xres/2, (gl.yres - 20)/2);
 			show_enrique_credits(gl.xres/2, (gl.yres - 40) /2);
 			show_jennipher_credits(gl.xres/2, (gl.yres - 60) /2);
@@ -935,7 +950,7 @@ void render() {
 		}
 	}
 
-	if (lives <= 3 || st < 30) {
+	if (lives <= 3 || st < 0.1) {
 		gl.Highscore = 1;
 		glColor3f(1.0, 1.0, 1.0);
 		show_background(gl.xres,gl.yres,gl.HighscoreTexture);
