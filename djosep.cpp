@@ -339,13 +339,13 @@ void show_lives(float lives)
 {
     Rect r;
     r.bot = gl.yres - 675;
-    r.left = 125;
+    r.left = 175;
     r.center = 0;
     
     if (lives > 1.5) {
-	    ggprint8b(&r, 16, 0xfbfbfa, "%0.2f", lives);
+	    ggprint13(&r, 16, 0xfbfbfa, "%0.2f", lives);
     } else { 
-	    ggprint8b(&r, 16, 0xe92b36, "%0.2f", lives);
+	    ggprint13(&r, 16, 0xe92b36, "%0.2f", lives);
     }
 }
 
