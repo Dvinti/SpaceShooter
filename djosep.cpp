@@ -22,7 +22,7 @@ extern Global gl;
 /*---------------------------------------------------------------------------*/
 int lbutton = 0;
 int rbutton = 0;
-#define nbuttons 3
+#define nbuttons 4
 
 typedef struct t_button {
     Rect r;
@@ -40,7 +40,7 @@ Button button[nbuttons];
 /* Modified for easier use with similar appearance */
 void init(void)
 {
-    for (int i = 1; i < nbuttons; i++) {
+    for (int i = 1; i < 2; i++) {
         button[i].r.width = gl.xres/gl.xres + 199;
         button[0].r.height = gl.yres/gl.yres + 50;
         button[1].r.height = gl.yres/gl.yres + 80;
@@ -57,8 +57,6 @@ void init(void)
         //strcpy(button[0].text, "Quit");
         if (gl.BackgroundTitle)
             strcpy(button[1].text, "Play");
-        if (gl.Highscore)
-            strcpy(button[2].text, "Credits");
         button[i].down = 0;
         button[i].click = 0;
         button[i].color[0] = 0.4f;
@@ -119,6 +117,36 @@ void init(void)
     }
     */
 }
+void init_hs(void)
+{
+    for (int i = 3; i < 4; i++) {
+        button[i].r.width = gl.xres/gl.xres + 199;
+        button[0].r.height = gl.yres/gl.yres + 50;
+        button[2].r.height = gl.yres/gl.yres + 80;
+        button[i].r.left = gl.xres - 210;
+        button[0].r.bot = gl.yres - 60;
+        button[2].r.bot = gl.yres/700 + 10;
+        button[2].r.right =
+            button[i].r.left + button[i].r.width;
+        button[i].r.top = button[i].r.bot + button[i].r.height;
+        button[i].r.centerx =
+            (button[i].r.left + button[i].r.right) / 2;
+        button[i].r.centery =
+            (button[i].r.bot + button[i].r.top) / 2;
+        //strcpy(button[2].text, "Quit");
+        if (gl.Highscore)
+            strcpy(button[3].text, "Quit");
+        button[i].down = 0;
+        button[i].click = 0;
+        button[i].color[0] = 0.4f;
+        button[i].color[1] = 0.4f;
+        button[i].color[2] = 0.7f;
+        button[i].dcolor[0] = button[i].color[0] * 0.5f;
+        button[i].dcolor[1] = button[i].color[1] * 0.5f;
+        button[i].dcolor[2] = button[i].color[2] * 0.5f;
+        button[i].text_color = 0x00ffffff;
+    }
+}
 
 void mouse_click(int action)
 {
@@ -141,19 +169,12 @@ void mouse_click(int action)
                         startWindow();
                     }
                 }
-                if (i == 2) {
+                if (i == 3) {
                     if (gl.Highscore) {
-                        extern void credit_toggle();
-                        credit_toggle();
+                        exit(0);
                     }
                 }
             }
-        }
-    }
-    if (action == 2) {
-        for (i = 0; i < nbuttons; i++) {
-            button[i].down = 0;
-            button[i].click = 0;
         }
     }
 }
@@ -248,6 +269,45 @@ void PlayButton()
     }
 }
 
+void Quit_Button()
+{
+    Rect r;
+    if (button[3].over) {
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glLineWidth(2);
+        glBegin(GL_LINE_LOOP);
+            glVertex2i(button[3].r.left-2,  button[3].r.bot-2);
+            glVertex2i(button[3].r.left-2,  button[3].r.top+2);
+            glVertex2i(button[3].r.right+2, button[3].r.top+2);
+            glVertex2i(button[3].r.right+2, button[3].r.bot-2);
+            glVertex2i(button[3].r.left-2,  button[3].r.bot-2);
+        glEnd();
+        glLineWidth(1);
+    }
+    if (button[3].down) {
+        glColor3fv(button[3].dcolor);
+    } else {
+        glColor3fv(button[3].color);
+    }
+
+    glBegin(GL_QUADS);
+        glVertex2i(button[3].r.left,  button[3].r.bot);
+        glVertex2i(button[3].r.left,  button[3].r.top);
+        glVertex2i(button[3].r.right, button[3].r.top);
+        glVertex2i(button[3].r.right, button[3].r.bot);
+    glEnd();
+
+    r.left = button[3].r.centerx;
+    r.bot  = button[3].r.centery-8;
+    r.center = 1;
+
+    if (button[3].down) {
+        ggprint16(&r, 0, button[3].text_color, "Pressed!");
+    } else {
+        ggprint16(&r, 0, button[3].text_color, button[3].text);
+    }
+}
+
 void show_Daniels_credits(int x, int y)
 {
     Rect r;
@@ -310,6 +370,61 @@ void print_pause()
         r.center = 0;
         ggprint40(&r, 16, 0xfbfbfa, "Paused");
     }
+}
+
+void high_score(int score, int highscore)
+{
+    Rect r;
+    r.bot = gl.yres - 150;
+    r.left = gl.xres/2 -100;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "Highscores");
+
+    /* Names */
+    r.bot = gl.yres - 285;
+    r.left = 280;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "1.  Player 1");
+
+    r.bot = gl.yres - 380;
+    r.left = 280;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "2. Player 2");
+
+    r.bot = gl.yres - 462;
+    r.left = 280;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "3. Player 3");
+
+    r.bot = gl.yres - 545;
+    r.left = 280;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "4. Player 4");	
+
+    /* Scores */
+    r.bot = gl.yres - 285;
+    r.left = 600;
+    r.center = 0;
+    if (score > highscore) {
+        ggprint40(&r, 16, 0xfbfbfa, "%0.5i", score); // Player 1
+    } else {
+        ggprint40(&r, 16, 0xfbfbfa, "%0.5i", highscore);
+    }
+
+    r.bot = gl.yres - 380;
+    r.left = 600;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "00500"); // Player 2
+
+    r.bot = gl.yres - 462;
+    r.left = 600;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "00350"); // Player 3
+
+    r.bot = gl.yres - 545;
+    r.left = 600;
+    r.center = 0;
+    ggprint40(&r, 16, 0xfbfbfa, "00250"); // Player 4
 }
 
 /*

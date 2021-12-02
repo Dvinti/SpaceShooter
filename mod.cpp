@@ -872,6 +872,7 @@ void render() {
 			glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
 			glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
 			glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
+			glEnd();
 		}
 
 		// Show Instructions
@@ -931,88 +932,8 @@ void render() {
 		glColor3f(1.0, 1.0, 1.0);
 		show_background(gl.xres,gl.yres,gl.HighscoreTexture);
 
-		if (gl.Highscore) {
-			/*
-			   if (button[2].over) {
-			   glColor3f(1.0f, 0.0f, 0.0f);
-			   glLineWidth(2);
-			   glBegin(GL_LINE_LOOP);
-			   glVertex2i(button[2].r.left-2,  button[2].r.bot-2);
-			   glVertex2i(button[2].r.left-2,  button[2].r.top+2);
-			   glVertex2i(button[2].r.right+2, button[2].r.top+2);
-			   glVertex2i(button[2].r.right+2, button[2].r.bot-2);
-			   glVertex2i(button[2].r.left-2,  button[2].r.bot-2);
-			   glEnd();
-			   glLineWidth(1);
-			   }
-			   if (button[2].down) {
-			   glColor3fv(button[2].dcolor);
-			   } else {
-			   glColor3fv(button[2].color);
-			   }
-			   glBegin(GL_QUADS);
-			   glVertex2i(button[2].r.left,  button[2].r.bot);
-			   glVertex2i(button[2].r.left,  button[2].r.top);
-			   glVertex2i(button[2].r.right, button[2].r.top);
-			   glVertex2i(button[2].r.right, button[2].r.bot);
-			   glEnd();
-			   r.left = button[2].r.centerx;
-			   r.bot  = button[2].r.centery-8;
-			   r.center = 1;
-			   if (button[2].down) {
-			   ggprint16(&r, 0, button[2].text_color, "Pressed!");
-			   } else {
-			   ggprint16(&r, 0, button[2].text_color, button[2].text);
-			   }*/
-		}
-
-		r.bot = gl.yres - 150;
-		r.left = gl.xres/2 -100;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "Highscores");
-
-		r.bot = gl.yres - 285;
-		r.left = 280;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "1.  Player 1");
-
-		r.bot = gl.yres - 380;
-		r.left = 280;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "2. Player 2");
-
-		r.bot = gl.yres - 462;
-		r.left = 280;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "3. Player 3");
-
-		r.bot = gl.yres - 545;
-		r.left = 280;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "4. Player 4");	
-
-		r.bot = gl.yres - 285;
-		r.left = 600;
-		r.center = 0;
-		if (score > highscore) {
-			ggprint40(&r, 16, 0xfbfbfa, "%0.5i", score);
-		} else {
-			ggprint40(&r, 16, 0xfbfbfa, "%0.5i", highscore);
-		}
-		r.bot = gl.yres - 380;
-		r.left = 600;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "00500");
-
-		r.bot = gl.yres - 462;
-		r.left = 600;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "00350");
-
-		r.bot = gl.yres - 545;
-		r.left = 600;
-		r.center = 0;
-		ggprint40(&r, 16, 0xfbfbfa, "00250");	
+		extern void high_score(int, int);
+		high_score(score, highscore);
 	}
 
 	return;
