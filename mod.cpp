@@ -748,8 +748,8 @@ void render() {
             show_background(gl.xres,gl.yres,gl.Background1Texture);
         }
 
-        //extern void print_pause();
-        //print_pause();
+        extern void print_pause();
+        print_pause();
     
         // Show UI
         extern void show_ui();
@@ -917,49 +917,54 @@ void render() {
             }*/
         }
 
-        r.bot = gl.yres - 285;
-        r.left = 360;
+        r.bot = gl.yres - 150;
+        r.left = gl.xres/2 - 80;
         r.center = 0;
-        ggprint40(&r, 16, 0xfbfbfa, "1. Daniel");
+        ggprint40(&r, 16, 0xfbfbfa, "Highscores");
 
         r.bot = gl.yres - 285;
-        r.left = 560;
+        r.left = 320;
+        r.center = 0;
+        ggprint40(&r, 16, 0xfbfbfa, "1.  Player 1");
+
+        r.bot = gl.yres - 285;
+        r.left = 600;
         r.center = 0;
         if (score > highscore) {
-            ggprint40(&r, 16, 0xfbfbfa, "%0.4i", score);
+            ggprint40(&r, 16, 0xfbfbfa, "%0.5i", score);
         } else {
-            ggprint40(&r, 16, 0xfbfbfa, "%0.4i", highscore);
+            ggprint40(&r, 16, 0xfbfbfa, "%0.5i", highscore);
         }
 
         r.bot = gl.yres - 380;
-        r.left = 360;
+        r.left = 320;
         r.center = 0;
-        ggprint40(&r, 16, 0xfbfbfa, "2. Enrique");
+        ggprint40(&r, 16, 0xfbfbfa, "2. Player 2");
 
         r.bot = gl.yres - 380;
-        r.left = 555;
+        r.left = 600;
         r.center = 0;
-        ggprint40(&r, 16, 0xfbfbfa, "0500");
+        ggprint40(&r, 16, 0xfbfbfa, "00500");
         
         r.bot = gl.yres - 462;
-        r.left = 360;
+        r.left = 320;
         r.center = 0;
-        ggprint40(&r, 16, 0xfbfbfa, "3. Jose");
+        ggprint40(&r, 16, 0xfbfbfa, "3. Player 3");
 
         r.bot = gl.yres - 462;
-        r.left = 565;
+        r.left = 600;
         r.center = 0;
-        ggprint40(&r, 16, 0xfbfbfa, "0350");
+        ggprint40(&r, 16, 0xfbfbfa, "00350");
 
         r.bot = gl.yres - 545;
-        r.left = 370;
+        r.left = 320;
         r.center = 0;
-        ggprint40(&r, 16, 0xfbfbfa, "4. Frankie");
+        ggprint40(&r, 16, 0xfbfbfa, "4. Player 4");
 
         r.bot = gl.yres - 545;
-        r.left = 570;
+        r.left = 600;
         r.center = 0;
-        ggprint40(&r, 16, 0xfbfbfa, "0250");
+        ggprint40(&r, 16, 0xfbfbfa, "00250");
     }
 
     return;
