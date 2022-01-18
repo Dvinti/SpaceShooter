@@ -24,3 +24,6 @@ Using terminal you will need to navigate to the spaceshooter folder.
 once there you can run the following command to compile: ```make```
 
 To run the game use the command: ```./mod```
+
+## The Team:
+This game was made possible with the help of @Dvinti, @JoseFigueroa21, @fsanchez23, and @jandrestacza
