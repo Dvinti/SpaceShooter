@@ -23,4 +23,4 @@ ALUT:   ```sudo apt-get install libalut0 libalut-dev```
 Using terminal you will need to navigate to the spaceshooter folder.
 once there you can run the following command to compile: ```make```
 
-To run the game use the command: ```./spaceshooter```
+To run the game use the command: ```./mod```
